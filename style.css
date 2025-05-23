@@ -1,0 +1,116 @@
+/* Custom CSS */
+body {
+  font-family: "Inter", sans-serif;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDelay {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-fade-in-delay {
+  animation: fadeInDelay 0.8s ease-out 0.2s both;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fadeInDelay 0.8s ease-out 0.4s both;
+}
+
+/* 스크롤 애니메이션 */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.6s ease-out;
+}
+
+.scroll-animate.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 그라디언트 배경 */
+.bg-gradient-radial {
+  background-image: radial-gradient(circle, transparent, rgba(0, 0, 0, 0.8));
+}
+
+/* 스킬 바 애니메이션 */
+.skill-bar {
+  width: 0%;
+  transition: width 1s ease-out;
+}
+
+.skill-bar.animate {
+  width: var(--skill-level);
+}
+
+/* 프로젝트 카드 호버 효과 */
+.project-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* 히어로 섹션 패럴랙스 효과 */
+.hero-parallax {
+  transform: translateY(0);
+  transition: transform 0.1s ease-out;
+}
+
+/* 스무스 스크롤 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 반응형 텍스트 */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-content p {
+    font-size: 1.125rem;
+  }
+}
+
+/* 커스텀 스크롤바 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
+}
