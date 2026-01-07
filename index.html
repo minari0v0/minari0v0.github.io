@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>김민한 - 개발자 포트폴리오</title>
+    <title>minari0v0's portfolio</title>
     <meta name="description" content="김민한의 개발자 포트폴리오">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,7 +11,13 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="text-text-color bg-bg-color">
+
+    <!-- Theme Toggle Button -->
+    <button id="theme-toggle" class="fixed top-6 right-6 z-50 p-2 rounded-full shadow-md theme-toggle-button">
+        <i data-lucide="sun" class="block dark:hidden w-6 h-6"></i>
+        <i data-lucide="moon" class="hidden dark:block w-6 h-6"></i>
+    </button>
 
     <!-- Hero Section -->
     <section id="hero">
@@ -19,45 +25,45 @@
             <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
                 안녕하세요, <span class="highlight">김민한</span>입니다
             </h1>
-            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-slate-400 animate-fade-in-delay">
+            <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-text-color-muted animate-fade-in-delay">
                 현대적인 웹 경험을 만드는 신입 개발자입니다.
             </p>
-            <button onclick="scrollToSection('projects')" class="hero-button animate-fade-in-delay-2">
-                프로젝트 보기
+            <button onclick="scrollToSection('about')" class="hero-button animate-fade-in-delay-2">
+                더 알아보기
             </button>
         </div>
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <i data-lucide="arrow-down" class="w-8 h-8"></i>
+            <i data-lucide="arrow-down" class="w-8 h-8 text-text-color-muted/70"></i>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about">
+    <section id="about" class="bg-bg-color">
         <div class="container px-4 mx-auto">
             <div class="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-24">
                 <div class="profile-image-container scroll-animate">
-                    <div class="w-64 h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden flex-shrink-0 border-8 border-[var(--primary-color-light)] shadow-2xl">
-                        <img src="취업사진.jpg" alt="프로필 사진" class="w-full h-full object-cover">
+                    <div class="w-64 h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden flex-shrink-0 border-8 border-primary-color-light/50 shadow-2xl">
+                        <img src="/images/profile.jpg" alt="프로필 사진" class="w-full h-full object-cover">
                     </div>
                 </div>
                 <div class="about-content text-center lg:text-left scroll-animate max-w-xl">
                     <h2 class="text-4xl md:text-5xl font-bold mb-4">소개</h2>
-                    <p class="text-lg text-[var(--text-color-muted)] mb-8">
+                    <p class="text-lg text-text-color-muted mb-8">
                         다양한 프로젝트를 통해 배우고 성장하는 것을 즐깁니다. 웹 개발, AI, 데이터 처리 등 새로운 기술을 탐구하고 적용하는 데 큰 흥미를 가지고 있습니다.
                     </p>
                     <div class="flex justify-center lg:justify-start flex-wrap gap-x-6 gap-y-4 mb-10">
-                        <a href="https://github.com/minari0v0" target="_blank" class="contact-link">
+                        <a href="https://github.com/minari0v0" target="_blank" class="contact-button">
                             <i data-lucide="github" class="w-6 h-6"></i>
-                            <span>GitHub</span>
+                            <span>GitHub - minari0v0</span>
                         </a>
-                        <a href="mailto:contact@example.com" class="contact-link">
+                        <a href="mailto:contact@example.com" class="contact-button">
                             <i data-lucide="mail" class="w-6 h-6"></i>
-                            <span>Email</span>
+                            <span>cc360653@gmail.com</span>
                         </a>
-                         <div class="contact-link">
+                         <a href="tel:010-1234-5678" class="contact-button">
                             <i data-lucide="phone" class="w-6 h-6"></i>
-                            <span>010-1234-5678</span>
-                        </div>
+                            <span>010-2666-5762</span>
+                        </a>
                     </div>
                     
                     <h3 class="text-2xl font-bold mb-4">Core Values</h3>
@@ -85,7 +91,7 @@
     </section>
 
     <!-- Projects Section -->
-    <section id="projects" class="py-24">
+    <section id="projects" class="bg-card-bg-color">
         <div class="container px-4 mx-auto">
             <div class="max-w-7xl mx-auto">
                 <h2 class="text-4xl md:text-5xl section-title scroll-animate">주요 프로젝트</h2>
@@ -101,7 +107,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact">
+    <section id="contact" class="bg-bg-color">
         <div class="container px-4 mx-auto flex flex-col justify-center items-center h-full">
             <div class="max-w-3xl mx-auto text-center w-full">
                 <h2 class="text-4xl md:text-5xl section-title scroll-animate">연락처</h2>
@@ -126,30 +132,50 @@
             <!-- Footer -->
             <footer class="absolute bottom-0 left-0 right-0 py-8 border-t border-[var(--border-color)]">
                 <div class="container px-4 mx-auto text-center">
-                    <p class="text-sm text-[var(--text-color-muted)]">&copy; 2024 김민한. All rights reserved.</p>
+                    <p class="text-sm text-text-color-muted">&copy; 2026 minari0v0. All rights reserved.</p>
                 </div>
             </footer>
         </div>
     </section>
 
-    <!-- Theme Toggle Button -->
-    <button id="theme-toggle" class="fixed top-6 right-6 z-50 bg-neutral-100 dark:bg-neutral-800 p-2 rounded-full shadow-md">
-        <i data-lucide="sun" class="block dark:hidden"></i>
-        <i data-lucide="moon" class="hidden dark:block"></i>
-    </button>
-
-    <!-- Project Modal -->
-    <div id="project-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div id="modal-content" class="w-11/12 max-w-4xl max-h-[90vh] rounded-lg shadow-2xl flex flex-col">
-            <div class="p-4 border-b flex justify-between items-center flex-shrink-0">
-                <h3 id="modal-title" class="text-xl font-bold"></h3>
-                <button id="modal-close" class="text-2xl leading-none">&times;</button>
+    <!-- README Modal -->
+    <div id="readme-modal" class="modal-container">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="readme-modal-title" class="modal-title-text"></h3>
+                <button class="modal-close-button">&times;</button>
             </div>
-            <div class="p-6 overflow-y-auto">
-                <img id="modal-image" src="" alt="프로젝트 스크린샷" class="w-full h-auto rounded-md mb-6 border">
-                <div id="modal-description" class="prose max-w-none"></div>
+            <div id="readme-modal-body" class="modal-body"></div>
+        </div>
+    </div>
+    
+    <!-- Project Detail Modal -->
+    <div id="project-detail-modal" class="modal-container">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3 id="detail-modal-title" class="modal-title-text"></h3>
+                <button class="modal-close-button">&times;</button>
+            </div>
+            <div class="modal-body detail-modal-body">
+                <div class="gallery-container">
+                    <div class="main-image-container">
+                        <img id="detail-modal-main-image" src="" alt="Main project image">
+                    </div>
+                    <div id="detail-modal-thumbnails" class="thumbnail-container">
+                        <!-- Thumbnails will be generated here -->
+                    </div>
+                </div>
+                <div id="detail-modal-description" class="description-container">
+                    <!-- Custom description will be here -->
+                </div>
             </div>
         </div>
+    </div>
+
+
+    <!-- Image Zoom Overlay -->
+    <div id="image-zoom-overlay" class="image-zoom-overlay">
+        <img id="zoomed-image" src="" alt="Zoomed project image">
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
