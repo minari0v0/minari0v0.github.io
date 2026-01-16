@@ -1,0 +1,181 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Added custom Paperlogy font face */
+@font-face {
+  font-family: "Paperlogy";
+  src: url("/fonts/Paperlogy-4Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #333333;
+  --card: #ffffff;
+  --card-foreground: #333333;
+  --popover: #ffffff;
+  --popover-foreground: #333333;
+  --primary: #7c9070;
+  --primary-foreground: #ffffff;
+  --secondary: #f5f5f0;
+  --secondary-foreground: #333333;
+  --muted: #f5f5f0;
+  --muted-foreground: #666666;
+  --accent: #e8ede5;
+  --accent-foreground: #333333;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e5e5e0;
+  --input: #e5e5e0;
+  --ring: #7c9070;
+  --radius: 0.75rem;
+
+  /* Code block - One Dark Pro theme */
+  --code-bg: #282c34;
+  --code-fg: #abb2bf;
+}
+
+/* Updated font-sans to use Paperlogy as primary and smoother font rendering */
+@theme inline {
+  --font-sans: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", "Fira Code", monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Hide scrollbar for carousel */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Markdown prose styling */
+.prose {
+  @apply text-foreground leading-relaxed;
+}
+
+.prose h1 {
+  @apply text-3xl font-bold mt-8 mb-4 text-foreground;
+}
+
+.prose h2 {
+  @apply text-2xl font-semibold mt-8 mb-3 text-foreground;
+}
+
+.prose h3 {
+  @apply text-xl font-semibold mt-6 mb-2 text-foreground;
+}
+
+.prose p {
+  @apply mb-4 text-foreground;
+}
+
+.prose ul,
+.prose ol {
+  @apply mb-4 pl-6;
+}
+
+.prose li {
+  @apply mb-2;
+}
+
+.prose a {
+  @apply text-primary underline underline-offset-2 hover:opacity-80;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-primary pl-4 italic my-4 text-muted-foreground;
+}
+
+/* Code blocks with One Dark Pro theme */
+.prose pre {
+  @apply rounded-lg my-4 p-4 overflow-x-auto;
+  background-color: #282c34;
+  color: #abb2bf;
+}
+
+.prose code {
+  @apply font-mono text-sm;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0;
+  color: #abb2bf;
+}
+
+.prose :not(pre) > code {
+  @apply bg-secondary px-1.5 py-0.5 rounded text-foreground;
+}
+
+/* Syntax highlighting - One Dark Pro colors */
+.prose pre .keyword {
+  color: #c678dd;
+}
+.prose pre .string {
+  color: #98c379;
+}
+.prose pre .number {
+  color: #d19a66;
+}
+.prose pre .comment {
+  color: #5c6370;
+  font-style: italic;
+}
+.prose pre .function {
+  color: #61afef;
+}
+.prose pre .class-name {
+  color: #e5c07b;
+}
