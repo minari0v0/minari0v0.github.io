@@ -20,9 +20,22 @@ export default function HomePage() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-        <div className="absolute bottom-8 left-8 md:bottom-12 md:left-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">minari0v0's Archive</h1>
+        {/* 그라데이션 오버레이 */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        
+        {/* 텍스트 컨테이너 */}
+        <div className="absolute inset-0 flex flex-col justify-end pb-8 md:pb-12">
+          {/* 그라데이션을 텍스트 뒤에만 더 강하게 줍니다 */}
+          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+          <div className="relative max-w-[1100px] mx-auto w-full px-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight drop-shadow-md">
+              minari0v0's Archive
+            </h1>
+            <p className="mt-2 text-lg text-gray-200 font-medium opacity-90">
+              기록하고, 성장하고, 공유하는 공간
+            </p>
+          </div>
         </div>
       </section>
 

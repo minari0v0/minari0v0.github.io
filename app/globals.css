@@ -43,6 +43,8 @@
 @theme inline {
   --font-sans: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "Geist Mono", "Fira Code", monospace;
+  --color-matcha-500: #7c9070;
+  --color-matcha-600: #5e6e54;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
