@@ -1,19 +1,31 @@
-// lib/mdx.ts
 import fs from "fs"
 import path from "path"
 import matter from "gray-matter"
 
-const projectsDirectory = path.join(process.cwd(), "content/projects")
+// 경로 설정
+const projectsDirectory = path.join(process.cwd(), "content", "projects")
 
-// 1. 모든 프로젝트 글 가져오기
 export function getProjectPosts() {
-  // 폴더가 없으면 빈 배열 반환 (에러 방지)
+  console.log("------------------------------------------------")
+  console.log("🔍 [디버깅] 프로젝트 폴더 찾는 중...");
+  console.log("📂 현재 위치(CWD):", process.cwd());
+  console.log("📂 목표 폴더:", projectsDirectory);
+
+  // 1. 폴더가 없는 경우
   if (!fs.existsSync(projectsDirectory)) {
+    console.error("❌ 오류: 폴더가 실제로 존재하지 않습니다!");
     return []
   }
 
   const fileNames = fs.readdirSync(projectsDirectory)
-  const allProjects = fileNames.map((fileName) => {
+  console.log("📄 발견된 파일들:", fileNames);
+
+  // 2. .mdx 파일만 걸러내기
+  const mdxFiles = fileNames.filter((fileName) => fileName.endsWith(".mdx"))
+  console.log("📝 MDX 파일 목록:", mdxFiles);
+  console.log("------------------------------------------------")
+
+  const allProjects = mdxFiles.map((fileName) => {
     const slug = fileName.replace(/\.mdx$/, "")
     const fullPath = path.join(projectsDirectory, fileName)
     const fileContents = fs.readFileSync(fullPath, "utf8")
@@ -22,16 +34,22 @@ export function getProjectPosts() {
     return {
       slug,
       ...data,
-    } as any // 타입은 나중에 정확히 정의하면 됨
+    } as any
   })
 
   // 날짜순 정렬
   return allProjects.sort((a, b) => (a.date < b.date ? 1 : -1))
 }
 
-// 2. 특정 프로젝트 글 가져오기 (Slug로 검색)
 export function getProjectBySlug(slug: string) {
+  if (!fs.existsSync(projectsDirectory)) return { slug, frontmatter: null, content: "" }
+  
   const fullPath = path.join(projectsDirectory, `${slug}.mdx`)
+  
+  if (!fs.existsSync(fullPath)) {
+    return { slug, frontmatter: null, content: "" }
+  }
+
   const fileContents = fs.readFileSync(fullPath, "utf8")
   const { data, content } = matter(fileContents)
 
