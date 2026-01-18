@@ -14,7 +14,7 @@ export async function generateStaticParams() {
 
 // 2. 메타데이터 생성 (수정됨: await params)
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  // ▼▼▼ 여기가 핵심 수정 사항입니다! ▼▼▼
+  // ▼▼▼ 여기가 핵심 수정 사항 ▼▼▼
   const { slug } = await params
   // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
   
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 // 3. 페이지 컴포넌트 (수정됨: await params)
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  // ▼▼▼ 여기가 핵심 수정 사항입니다! ▼▼▼
+  // ▼▼▼ 여기가 핵심 수정 사항 ▼▼▼
   const { slug } = await params
   // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
@@ -69,10 +69,13 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
              <div className="hidden md:block w-px h-6 bg-gray-300"></div>
 
+             {/* 날짜 및 링크 버튼 */}
              <div className="flex flex-wrap items-center gap-4 text-sm">
                 <span className="flex items-center text-gray-500">
                   <Calendar className="w-4 h-4 mr-2" />
-                  {frontmatter.date}
+                  {frontmatter.date instanceof Date 
+                    ? frontmatter.date.toLocaleDateString("ko-KR") 
+                    : frontmatter.date}
                 </span>
 
                 {frontmatter.github && (
