@@ -1,4 +1,3 @@
-// components/toc.tsx
 "use client"
 
 import { useEffect, useState } from "react"
@@ -6,9 +5,10 @@ import { useEffect, useState } from "react"
 export default function TableOfContents() {
   const [headings, setHeadings] = useState<{ id: string; text: string; level: number }[]>([])
   const [activeId, setActiveId] = useState("")
+  const [isVisible, setIsVisible] = useState(false) // [NEW] 보여짐 여부 상태
 
   useEffect(() => {
-    // h2, h3 태그만 긁어모으기
+    // 1. 헤딩 태그 수집
     const elements = Array.from(document.querySelectorAll("h2, h3"))
     const data = elements.map((elem) => ({
       id: elem.id,
@@ -17,7 +17,7 @@ export default function TableOfContents() {
     }))
     setHeadings(data)
 
-    // 스크롤 감지해서 현재 위치 하이라이팅
+    // 2. 현재 읽고 있는 위치 감지 (IntersectionObserver)
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -28,13 +28,36 @@ export default function TableOfContents() {
       },
       { rootMargin: "0% 0% -80% 0%" }
     )
-
     elements.forEach((elem) => observer.observe(elem))
-    return () => observer.disconnect()
+
+    // 3. [NEW] 스크롤 위치 감지해서 TOC 숨기기/보이기
+    const handleScroll = () => {
+      // 400px 이상 스크롤되면 보임, 아니면 숨김
+      if (window.scrollY > 400) {
+        setIsVisible(true)
+      } else {
+        setIsVisible(false)
+      }
+    }
+
+    // 초기 실행 및 이벤트 등록
+    handleScroll()
+    window.addEventListener("scroll", handleScroll)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener("scroll", handleScroll)
+    }
   }, [])
 
   return (
-    <nav className="sticky top-24 hidden lg:block w-64 pl-4 border-l border-gray-100">
+    <nav
+      className={`
+        sticky top-32 w-64 pl-4 border-l border-gray-100 
+        transition-opacity duration-500 ease-in-out  // [NEW] 부드러운 투명도 전환
+        ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"} // [NEW] 안 보일 땐 클릭도 안 되게
+      `}
+    >
       <p className="mb-4 text-sm font-bold text-gray-900 uppercase tracking-wider">On This Page</p>
       <ul className="space-y-3 text-sm">
         {headings.map((heading) => (
@@ -46,7 +69,7 @@ export default function TableOfContents() {
               href={`#${heading.id}`}
               className={`block transition-colors duration-200 ${
                 activeId === heading.id
-                  ? "text-matcha-500 font-semibold" // 활성화됐을 때 말차색
+                  ? "text-matcha-500 font-bold scale-105 origin-left" // 활성화 효과 강화
                   : "text-gray-500 hover:text-gray-900"
               }`}
               onClick={(e) => {
