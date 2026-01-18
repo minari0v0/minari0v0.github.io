@@ -1,5 +1,5 @@
 import { ProjectCard } from "@/components/project-card"
-import { projects } from "@/lib/data"
+import { getProjectPosts } from "@/lib/mdx" // 우리가 만든 진짜 데이터 함수
 
 export const metadata = {
   title: "프로젝트 | minari0v0",
@@ -7,26 +7,27 @@ export const metadata = {
 }
 
 export default function ProjectsPage() {
+  // 가짜 데이터(projects) 대신 진짜 MDX 파일들(posts)을 가져옵니다
+  const posts = getProjectPosts()
+
   return (
     <div className="max-w-[1100px] mx-auto px-6 py-12">
-      {/* Header */}
       <header className="mb-12">
         <h1 className="text-3xl font-bold text-[#333333]">프로젝트</h1>
         <p className="mt-3 text-gray-500">풍부한 상상과 호기심으로 만들어 온 다양한 프로젝트를 소개합니다.</p>
       </header>
 
-      {/* 3-column Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map((project) => (
+        {posts.map((project) => (
           <ProjectCard
-            key={project.id}
-            id={project.id}
+            key={project.slug}
+            id={project.slug} // id 대신 slug를 사용
             title={project.title}
             description={project.description}
-            image={project.image}
-            date={project.date}
-            tags={project.techStack}
-            href={`/projects/${project.id}`}
+            image={project.thumbnail || "/placeholder.svg"} // thumbnail이 없으면 기본 이미지
+            date={project.date} // 날짜 처리 (필요시 변환)
+            tags={project.tags}
+            href={`/projects/${project.slug}`}
           />
         ))}
       </div>

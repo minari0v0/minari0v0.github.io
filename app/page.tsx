@@ -3,15 +3,21 @@ import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { ProjectCard } from "@/components/project-card"
 import { StoryCarousel } from "@/components/story-carousel"
-import { getFeaturedProjects, getRecentPosts } from "@/lib/data"
+import { getRecentPosts } from "@/lib/data" // 스토리는 아직 가짜 데이터 유지
+import { getProjectPosts } from "@/lib/mdx" // [NEW] 진짜 프로젝트 데이터 함수 가져오기
 
 export default function HomePage() {
-  const featuredProjects = getFeaturedProjects()
+  // 1. 모든 프로젝트 글을 가져옵니다.
+  const allProjects = getProjectPosts()
+  
+  // 2. 최신순으로 3개만 잘라서 '주요 프로젝트'로 씁니다.
+  const featuredProjects = allProjects.slice(0, 3)
+  
   const recentPosts = getRecentPosts(5)
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section - Fixed height 450px */}
+      {/* Hero Section */}
       <section className="relative h-[450px] w-full overflow-hidden">
         <Image
           src="/cozy-desk-setup-with-matcha-green-aesthetic-warm-l.jpg"
@@ -20,12 +26,9 @@ export default function HomePage() {
           className="object-cover"
           priority
         />
-        {/* 그라데이션 오버레이 */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         
-        {/* 텍스트 컨테이너 */}
         <div className="absolute inset-0 flex flex-col justify-end pb-8 md:pb-12">
-          {/* 그라데이션을 텍스트 뒤에만 더 강하게 줍니다 */}
           <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
           <div className="relative max-w-[1100px] mx-auto w-full px-6">
@@ -55,14 +58,16 @@ export default function HomePage() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {featuredProjects.map((project) => (
             <ProjectCard
-              key={project.id}
-              id={project.id}
+              key={project.slug}
+              id={project.slug} // [중요] id 대신 slug 사용
               title={project.title}
               description={project.description}
-              image={project.image}
-              date={project.date}
-              tags={project.techStack}
-              href={`/projects/${project.id}`}
+              // 썸네일이 없으면 기본 이미지(placeholder) 사용
+              image={project.thumbnail || "/placeholder.svg"} 
+              // 날짜가 객체면 문자열로 변환, 문자열이면 그대로 사용
+              date={project.date instanceof Date ? project.date.toLocaleDateString("ko-KR") : project.date}
+              tags={project.tags}
+              href={`/projects/${project.slug}`} // 링크 연결
             />
           ))}
         </div>
