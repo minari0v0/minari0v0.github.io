@@ -24,8 +24,7 @@ export function ContentCarousel({
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true, // 무한 루프
     align: "start",
-    slidesToScroll: 1,
-    duration: 25, // 부드러운 속도감
+    slidesToScroll: 1
   })
 
   const scrollPrev = useCallback(() => {
@@ -73,14 +72,14 @@ export function ContentCarousel({
         </div>
       </div>
 
-      {/* 2. 슬라이드 영역 (구조 변경됨) */}
+      {/* 2. 슬라이드 영역 */}
       <div className="overflow-hidden -mx-4 px-4 py-4" ref={emblaRef}>
-        {/* gap-6 대신 -ml-6 (왼쪽 마진 상쇄) 사용 */}
+        {/* gap 대신 -ml-6 (왼쪽 마진 상쇄) 사용 [무한루프 핵심] */}
         <div className="flex touch-pan-y -ml-6"> 
           {React.Children.map(children, (child, index) => (
             <div
               key={index}
-              // gap 대신 pl-6 (왼쪽 패딩)으로 간격 생성 -> 루프 계산 오류 해결!
+              // gap 대신 pl-6 (왼쪽 패딩)으로 간격 생성 [무한루프 핵심]
               className="flex-[0_0_100%] min-w-0 pl-6 md:flex-[0_0_50%] lg:flex-[0_0_33.33333%]" 
             >
               {child}
