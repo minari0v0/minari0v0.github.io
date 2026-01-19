@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import "./globals.css"
+import "katex/dist/katex.min.css";
 
 const paperlogy = localFont({
   src: "./fonts/Paperlogy-4Regular.ttf",

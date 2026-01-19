@@ -9,6 +9,8 @@ import TableOfContents from "@/components/toc"
 import remarkGfm from "remark-gfm"
 import rehypeSlug from "rehype-slug"
 import rehypePrettyCode from "rehype-pretty-code"
+import remarkMath from "remark-math"
+import rehypeKatex from "rehype-katex"
 
 // [삭제] localFont 제거 (globals.css에서 통합 관리)
 
@@ -86,9 +88,10 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                source={post.content} 
                options={{
                  mdxOptions: {
-                   remarkPlugins: [remarkGfm],
+                   remarkPlugins: [remarkGfm, remarkMath], 
                    rehypePlugins: [
                      rehypeSlug,
+                     rehypeKatex, 
                      [rehypePrettyCode, prettyCodeOptions]
                    ],
                  },
