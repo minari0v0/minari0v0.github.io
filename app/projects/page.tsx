@@ -1,31 +1,44 @@
 import { ProjectCard } from "@/components/project-card"
-import { getProjectPosts } from "@/lib/mdx" // 우리가 만든 진짜 데이터 함수
+import { getProjectPosts } from "@/lib/mdx"
 
 export const metadata = {
   title: "프로젝트 | minari0v0",
   description: "풍부한 상상과 호기심으로 만들어 온 다양한 프로젝트를 소개합니다.",
 }
 
+// 타입 정의 (에러 방지용 안전장치)
+interface Project {
+  slug: string
+  title: string
+  description: string
+  thumbnail?: string
+  date: string | Date
+  tags: string[]
+}
+
 export default function ProjectsPage() {
-  // 가짜 데이터(projects) 대신 진짜 MDX 파일들(posts)을 가져옵니다
-  const posts = getProjectPosts()
+  // any 타입 대신 Project[]로 단언하여 안전하게 사용
+  const posts = getProjectPosts() as unknown as Project[]
 
   return (
     <div className="max-w-[1100px] mx-auto px-6 py-12">
+      {/* Header */}
       <header className="mb-12">
         <h1 className="text-3xl font-bold text-[#333333]">프로젝트</h1>
         <p className="mt-3 text-gray-500">풍부한 상상과 호기심으로 만들어 온 다양한 프로젝트를 소개합니다.</p>
       </header>
 
+      {/* 3-column Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {posts.map((project) => (
           <ProjectCard
             key={project.slug}
-            id={project.slug} // id 대신 slug를 사용
+            id={project.slug}
             title={project.title}
             description={project.description}
-            image={project.thumbnail || "/placeholder.svg"} // thumbnail이 없으면 기본 이미지
-            date={project.date} // 날짜 처리 (필요시 변환)
+            image={project.thumbnail || "/placeholder.svg"}
+            // ▼▼▼ [수정] 날짜 객체를 문자열로 변환 ▼▼▼
+            date={project.date instanceof Date ? project.date.toLocaleDateString("ko-KR") : project.date}
             tags={project.tags}
             href={`/projects/${project.slug}`}
           />
