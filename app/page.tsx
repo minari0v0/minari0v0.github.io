@@ -1,7 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { getRecentPosts } from "@/lib/data"
-import { getProjectPosts } from "@/lib/mdx"
+import { getProjectPosts, getBlogPosts } from "@/lib/mdx"
 import { ContentCarousel } from "@/components/content-carousel"
 import { ProjectCard } from "@/components/project-card"
 
@@ -16,18 +15,19 @@ interface Project {
 }
 
 interface Post {
-  id: string
+  slug: string // id -> slug로 변경
   title: string
   excerpt: string
   image: string
-  date: string
+  date: string | Date // 날짜 객체 호환
 }
 
 export default function HomePage() {
   const allProjects = getProjectPosts() as unknown as Project[]
   const featuredProjects = allProjects.slice(0, 6) // 캐러셀용 6개
   
-  const recentPosts = getRecentPosts(6) as unknown as Post[]
+  const allPosts = getBlogPosts()
+  const recentPosts = allPosts.slice(0, 6) as unknown as Post[]
 
   return (
     <div className="flex flex-col">
@@ -79,13 +79,14 @@ export default function HomePage() {
         <ContentCarousel title="최신 스토리" viewAllHref="/blog">
           {recentPosts.map((post) => (
             <ProjectCard
-              key={post.id}
-              id={post.id}
+              key={post.slug}
+              id={post.slug} // id 대신 slug 사용
               title={post.title}
               description={post.excerpt}
               image={post.image || "/placeholder.svg"}
-              date={post.date}
-              href={`/blog/${post.id}`}
+              // 날짜 변환 로직 추가
+              date={post.date instanceof Date ? post.date.toLocaleDateString("ko-KR") : post.date}
+              href={`/blog/${post.slug}`} // 링크도 slug 기반으로 변경
             />
           ))}
         </ContentCarousel>

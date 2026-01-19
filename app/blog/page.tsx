@@ -1,7 +1,8 @@
+// app/blog/page.tsx
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
-import { blogPosts } from "@/lib/data"
+import { getBlogPosts } from "@/lib/mdx"
 
 export const metadata = {
   title: "스토리 | minari0v0",
@@ -9,6 +10,8 @@ export const metadata = {
 }
 
 export default function BlogPage() {
+  const posts = getBlogPosts()
+
   return (
     <div className="max-w-[1100px] mx-auto px-6 py-12">
       <header className="mb-12">
@@ -17,10 +20,10 @@ export default function BlogPage() {
       </header>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {blogPosts.map((post) => (
-          <Link key={post.id} href={`/blog/${post.id}`} className="group block">
+        {posts.map((post) => (
+          <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
             <article className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200">
-              {/* Image - 16:9 aspect ratio */}
+              {/* 이미지 영역 */}
               <div className="relative aspect-video overflow-hidden">
                 <Image
                   src={post.image || "/placeholder.svg"}
@@ -30,26 +33,22 @@ export default function BlogPage() {
                 />
               </div>
 
-              {/* Content */}
+              {/* 컨텐츠 영역 */}
               <div className="p-5">
-                {/* Date */}
-                <time className="text-xs text-gray-400" dateTime={post.date}>
-                  {new Date(post.date).toLocaleDateString("ko-KR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
+                <time className="text-xs text-gray-400">
+                  {post.date instanceof Date 
+                    ? post.date.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })
+                    : post.date}
                 </time>
 
-                {/* Title */}
                 <h2 className="mt-2 text-lg font-semibold text-[#333333] group-hover:text-[#7c9070] transition-colors line-clamp-1">
                   {post.title}
                 </h2>
 
-                {/* Summary */}
-                <p className="mt-2 text-sm text-gray-500 line-clamp-2">{post.excerpt}</p>
+                <p className="mt-2 text-sm text-gray-500 line-clamp-2 break-keep">
+                  {post.excerpt}
+                </p>
 
-                {/* Read more link */}
                 <div className="mt-4 flex items-center gap-1 text-sm text-[#7c9070] font-medium">
                   더 읽기 <ArrowRight className="h-4 w-4" />
                 </div>
