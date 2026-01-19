@@ -4,18 +4,14 @@ import { notFound } from "next/navigation"
 import { ArrowLeft, Github, Globe, Calendar } from "lucide-react"
 import { getProjectBySlug, getProjectPosts } from "@/lib/mdx"
 import TableOfContents from "@/components/toc"
-import localFont from "next/font/local"
-// [NEW] 플러그인 임포트 (MDXRemote 사용)
+
+// [플러그인 임포트]
 import { MDXRemote } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
 import rehypeSlug from "rehype-slug"
 import rehypePrettyCode from "rehype-pretty-code"
 
-// 폰트 로드
-const paperlogyMedium = localFont({
-  src: "../../../public/fonts/Paperlogy-5Medium.ttf",
-  display: "swap",
-})
+// [삭제됨] localFont 설정 제거 (globals.css에서 통합 관리)
 
 // 코드 하이라이팅 옵션
 const prettyCodeOptions = {
@@ -30,6 +26,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
+  
   const { frontmatter } = getProjectBySlug(slug)
   if (!frontmatter) return { title: "Project Not Found" }
 
@@ -45,13 +42,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   if (!frontmatter) notFound()
 
-  // 날짜 표시
   const dateDisplay = frontmatter.date instanceof Date 
     ? frontmatter.date.toLocaleDateString("ko-KR") 
     : frontmatter.date;
 
   return (
-    // [1] 상단 여백 축소 및 하단 여백 확보 (pt-8 pb-20)
     <div className="relative max-w-[1100px] mx-auto px-6 pb-20">
       
       {/* 상단 네비게이션 */}
@@ -61,14 +56,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-[#7c9070] transition-colors"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          목록으로 돌아가기 {/* [2] 한글화 확인 */}
+          목록으로 돌아가기
         </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-12">
         <article className="min-w-0">
           <header className="mb-10 border-b border-gray-100 pb-10">
-            {/* [3] 뱃지: 말차색 배경 + 흰색 글씨 + 진하게(font-bold) */}
+            {/* 뱃지 */}
             <div className="flex flex-wrap gap-2 mb-6">
               {frontmatter.tags?.map((tag: string) => (
                 <span
@@ -80,11 +75,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               ))}
             </div>
 
-            {/* 제목 (Medium 폰트) */}
-            <h1 className={`text-4xl font-bold text-[#333333] mb-4 leading-tight ${paperlogyMedium.className}`}>
+            {/* 제목 (전역 폰트 자동 적용) */}
+            <h1 className="text-4xl font-bold text-[#333333] mb-4 leading-tight">
               {frontmatter.title}
             </h1>
             
+            {/* 설명 */}
             <p className="text-xl text-gray-500 font-medium mb-6 leading-relaxed">
               {frontmatter.description}
             </p>
@@ -96,7 +92,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 {dateDisplay}
               </div>
 
-              {/* [4] 버튼: 크기 확대 (px-6 py-3, text-base) */}
+              {/* 버튼들 */}
               <div className="flex items-center gap-3 ml-auto sm:ml-0">
                 {frontmatter.github && (
                   <a
@@ -137,8 +133,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             </div>
           )}
 
-          {/* 본문 (플러그인 적용된 MDXRemote) */}
-          <div className={`prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-img:rounded-xl ${paperlogyMedium.className}`}>
+          {/* 본문 (전역 폰트 자동 적용) */}
+          <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-img:rounded-xl">
             <MDXRemote 
                source={content} 
                options={{

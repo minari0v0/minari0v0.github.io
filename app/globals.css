@@ -3,11 +3,33 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Paperlogy Regular (기본 폰트) */
+/* =========================================
+   [폰트 통합] Paperlogy 패밀리 정의
+   ========================================= */
+
+/* 1. Regular (기본 - 400) */
 @font-face {
   font-family: "Paperlogy";
   src: url("/fonts/Paperlogy-4Regular.ttf") format("truetype");
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 2. Medium (본문용 - 500) */
+@font-face {
+  font-family: "Paperlogy";
+  src: url("/fonts/Paperlogy-5Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 3. Bold (강조용 - 700) */
+@font-face {
+  font-family: "Paperlogy";
+  src: url("/fonts/Paperlogy-7Bold.ttf") format("truetype");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -34,28 +56,27 @@
   --ring: #7c9070;
   --radius: 0.75rem;
 
-  /* 커스텀 색상 변수 */
-  --matcha-dark: #1F4529; /* TOC 활성화 및 인용문 포인트 색상 (짙은 숲색) */
+  /* 커스텀 색상 */
+  --matcha-dark: #1F4529; /* 제목/인용문 강조색 */
   --code-bg: #282c34;     /* 코드 블록 배경 */
 }
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--border);
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: "Paperlogy", sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-  /* 스크롤바 레이아웃 시프트 방지 */
   html {
-    overflow-y: scroll; 
+    overflow-y: scroll;
     scroll-behavior: smooth;
   }
 }
 
-/* 캐러셀 스크롤바 숨김 */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -65,106 +86,119 @@
 }
 
 /* =========================================
-   [Prose] 마크다운 본문 스타일 완벽 개선
-   Velog 스타일 + 가독성 최적화
+   [Prose] 마크다운 스타일링 (Velog 스타일)
    ========================================= */
 
 .prose {
-  max-width: none; /* 너비 제한 해제 */
+  max-width: none;
   color: var(--foreground);
 }
 
-/* 1. 폰트 크기: 전체적으로 2px 정도 증가 (기본 16px -> 1.15rem 약 18.5px) */
+/* 1. 본문 스타일 (Medium 폰트 적용) */
 .prose p, 
 .prose li, 
 .prose table {
-  font-size: 1.15rem; 
-  line-height: 1.8; /* 줄 간격 넉넉하게 */
+  font-size: 1.15rem; /* 약 18.5px */
+  line-height: 1.8;
   margin-bottom: 1.5rem;
-  word-break: keep-all; /* 한글 단어 끊김 방지 */
+  font-weight: 500; /* [중요] 기본 굵기를 Medium(500)으로 설정 */
+  word-break: keep-all;
 }
 
-/* 2. 제목 스타일 (Paperlogy Medium 폰트는 페이지 컴포넌트에서 적용됨) */
+/* [버그 수정 1] Bold(**) 강제 적용 */
+/* 작은따옴표(')가 있어도 Bold가 풀리지 않도록 !important 사용 */
+.prose strong, .prose b {
+  font-family: "Paperlogy", sans-serif;
+  font-weight: 700 !important; 
+  color: #111111; /* 본문보다 아주 약간 더 진한 검정 */
+}
+
+/* 2. 제목 스타일 */
 .prose h1, .prose h2, .prose h3, .prose h4 {
-  color: var(--matcha-dark); /* #1F4529 짙은 숲색 */
-  font-weight: 700;
+  color: var(--matcha-dark);
+  font-weight: 700; /* 제목은 무조건 Bold */
   margin-top: 3.5rem;
   margin-bottom: 1.5rem;
-  scroll-margin-top: 120px; /* 목차 이동 시 헤더 가림 방지 */
+  scroll-margin-top: 120px;
 }
-
 .prose h1 { font-size: 2.2rem; }
 .prose h2 { font-size: 1.8rem; border-bottom: 1px solid #e5e5e0; padding-bottom: 0.5rem; }
 .prose h3 { font-size: 1.5rem; }
+.prose h4 { font-size: 1.35rem; margin-top: 2.5rem; }
 
-/* 3. [Velog 스타일] 인용문 (Blockquote) */
+/* 3. 인용문 */
 .prose blockquote {
-  background: #f8f9fa; /* 아주 연한 회색 배경 */
-  border-left: 6px solid var(--matcha-dark); /* 왼쪽 굵은 포인트 선 */
-  padding: 1.5rem 2rem; /* 안쪽 여백 넉넉하게 (위아래 높이 확보) */
+  background: #f8f9fa;
+  border-left: 6px solid var(--matcha-dark);
+  padding: 1.5rem 2rem;
   margin: 2rem 0;
-  border-radius: 0 8px 8px 0; /* 우측 모서리 둥글게 */
+  border-radius: 0 8px 8px 0;
 }
 .prose blockquote p {
-  font-size: 1.25rem; /* 인용문 폰트 0.5px 더 키움 */
+  font-size: 1.25rem;
   color: #495057;
   font-weight: 500;
-  margin: 0; /* 내부 마진 제거 */
+  margin: 0;
 }
 
-/* 4. [복구] 리스트 스타일 (점, 숫자) */
+/* 4. 리스트 */
 .prose ul {
-  list-style-type: disc; /* 점(Bullet) 복구 */
+  list-style-type: disc;
   padding-left: 1.8rem;
   margin-bottom: 1.5rem;
 }
 .prose ol {
-  list-style-type: decimal; /* 숫자(1. 2. 3.) 복구 */
+  list-style-type: decimal;
   padding-left: 1.8rem;
   margin-bottom: 1.5rem;
 }
 .prose li {
   margin-bottom: 0.5rem;
-  padding-left: 0.5rem; /* 마커와 텍스트 사이 간격 */
+  padding-left: 0.5rem;
 }
 
-/* 5. [Velog 스타일] 인라인 코드 (문장 중간의 `code`) */
-/* pre 태그 안에 있지 않은 code 태그만 선택 */
+/* 5. 인라인 코드 (기본) */
 .prose :not(pre) > code {
-  background-color: #f1f3f5; /* 연한 회색 배경 */
-  color: #e03131; /* 붉은색 텍스트 포인트 */
+  background-color: #f1f3f5;
+  color: #e03131;
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-family: "Menlo", "Consolas", monospace;
-  font-size: 0.9em; /* 본문보다 살짝 작게 */
+  font-size: 0.9em;
   font-weight: 500;
 }
 
-/* 6. 링크 스타일 (URL) */
-.prose a {
-  color: var(--primary); /* #7c9070 말차색 */
-  text-decoration: underline;
-  text-underline-offset: 4px; /* 밑줄 간격 띄우기 */
-  font-weight: 600;
-  transition: color 0.2s;
-}
-.prose a:hover {
-  color: var(--matcha-dark); /* 호버 시 진해짐 */
+/* [버그 수정 2] Bold 안의 코드 스타일 재정의 */
+/* **문장 `코드` 문장** 일 때, 코드는 굵어지지 않게(Medium) 처리 */
+.prose strong code {
+  font-weight: 500 !important; /* 부모(700)를 무시하고 Medium(500)으로 리셋 */
+  color: #e03131; /* 붉은색 유지 */
 }
 
-/* 7. [추가] 테이블 스타일 (표) */
+/* 6. 링크 스타일 */
+.prose a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: 600;
+  transition: color 0.2s;
+  word-break: break-all;
+}
+.prose a:hover {
+  color: var(--matcha-dark);
+}
+
+/* 7. 테이블 스타일 */
 .prose table {
   width: 100%;
   border-collapse: collapse;
   margin: 2rem 0;
-  overflow-x: auto; /* 모바일 가로 스크롤 */
-  display: block;   /* 반응형 처리를 위해 block으로 변경될 수 있음 */
+  overflow-x: auto;
+  display: block;
 }
-/* 테이블이 작을 땐 table-layout 유지 */
 @media (min-width: 768px) {
   .prose table { display: table; }
 }
-
 .prose th {
   background-color: #f8f9fa;
   color: #333333;
@@ -173,7 +207,6 @@
   padding: 0.75rem;
   border: 1px solid #dfe2e5;
 }
-
 .prose td {
   padding: 0.75rem;
   border: 1px solid #dfe2e5;
@@ -181,10 +214,9 @@
   vertical-align: top;
 }
 
-/* 8. 코드 블록 (Syntax Highlighting) */
-/* rehype-pretty-code가 생성하는 구조 스타일링 */
+/* 8. 코드 블록 */
 .prose pre {
-  background-color: #282c34 !important; /* 배경색 강제 지정 (One Dark Pro) */
+  background-color: #282c34 !important;
   color: #abb2bf;
   padding: 1.5rem;
   border-radius: 12px;
@@ -193,9 +225,7 @@
   font-size: 0.95rem;
   line-height: 1.6;
   border: 1px solid #e1e4e8;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
-
 .prose pre code {
   background-color: transparent !important;
   color: inherit;
@@ -203,10 +233,7 @@
   font-size: inherit;
   font-family: "Menlo", "Consolas", monospace;
 }
-
-/* 이미지 스타일 */
 .prose img {
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  margin: 2rem auto; /* 중앙 정렬 */
+  margin: 2rem auto;
 }

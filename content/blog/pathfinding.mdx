@@ -199,7 +199,7 @@ while (!pq.isEmpty()) {
 
 이걸 위해 나온 것이 **A\*알고리즘**이다.
 
-`F = G + H` 
+`F = G + H` <br>
 A* 의 핵심이다.
 
 - G: 지금까지 실제로 온 비용
@@ -212,13 +212,14 @@ A* 의 핵심이다.
 을 합산해서 가장 낮은 경로를 먼저 탐색
 
 ---
-**H (휴리스틱)란**
+**H (휴리스틱)란**<br>
 H는 남은 거리의 추정값이다.
 중요한 점은 추정이어야 한다.
 
 #### 대표적인 휴리스틱
 ![](https://velog.velcdn.com/images/minari0v0/post/f3dac7ab-bd0b-489b-a425-46b60d221bc1/image.png)
 [출처: velog - @calico](https://velog.io/@calico/%EC%9C%A0%ED%81%B4%EB%A6%AC%EB%93%9C-%EA%B1%B0%EB%A6%AC-Euclidean-Distance-%EB%A7%A8%ED%95%B4%ED%8A%BC-%EA%B1%B0%EB%A6%AC-Manhattan-Distance-%ED%95%B4%EB%B0%8D-%EA%B1%B0%EB%A6%AC-Hamming-Distance)
+<br>
 **맨해튼 거리**
 `|x1 - x2| + |y1 - y2|`
 - 상하좌우로만 이동 가능한 격자(Grid) 환경에서 사용
