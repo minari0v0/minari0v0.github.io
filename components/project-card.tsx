@@ -10,6 +10,7 @@ interface ProjectCardProps {
   date: string
   tags?: string[]
   href: string
+  hideDate?: boolean // [NEW] 날짜 숨김 옵션 추가
 }
 
 export function ProjectCard({
@@ -20,6 +21,7 @@ export function ProjectCard({
   date,
   tags = [],
   href,
+  hideDate = false, // 기본값은 false (날짜 보임)
 }: ProjectCardProps) {
   return (
     <Link
@@ -44,8 +46,7 @@ export function ProjectCard({
           {title}
         </h3>
 
-        {/* 설명 (최대 2줄) */}
-        {/* ▼▼▼ [수정] break-keep 추가: 한글 단어가 중간에 잘리지 않게 함 ▼▼▼ */}
+        {/* 설명 */}
         <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed mb-4 break-keep">
           {description}
         </p>
@@ -72,11 +73,13 @@ export function ProjectCard({
           </div>
         )}
 
-        {/* 4. 날짜 영역 */}
-        <div className="pt-3 border-t border-gray-100 flex items-center text-xs text-gray-400 font-medium">
-          <Calendar className="w-3.5 h-3.5 mr-1.5 opacity-70" />
-          {date}
-        </div>
+        {/* 4. 날짜 영역 (hideDate 옵션 적용) */}
+        {!hideDate && (
+          <div className="pt-3 border-t border-gray-100 flex items-center text-xs text-gray-400 font-medium">
+            <Calendar className="w-3.5 h-3.5 mr-1.5 opacity-70" />
+            {date}
+          </div>
+        )}
       </div>
     </Link>
   )

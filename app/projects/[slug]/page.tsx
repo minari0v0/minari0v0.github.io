@@ -3,26 +3,33 @@ import Image from "next/image"
 import { notFound } from "next/navigation"
 import { ArrowLeft, Github, Globe, Calendar } from "lucide-react"
 import { getProjectBySlug, getProjectPosts } from "@/lib/mdx"
-import { CompileMDX } from "@/lib/mdx-compile"
 import TableOfContents from "@/components/toc"
-import localFont from "next/font/local" // [NEW] 폰트 로더
+import localFont from "next/font/local"
+// [NEW] 플러그인 임포트 (MDXRemote 사용)
+import { MDXRemote } from "next-mdx-remote/rsc"
+import remarkGfm from "remark-gfm"
+import rehypeSlug from "rehype-slug"
+import rehypePrettyCode from "rehype-pretty-code"
 
-// [NEW] Paperlogy Medium 폰트 로드 (제목, 본문용)
+// 폰트 로드
 const paperlogyMedium = localFont({
   src: "../../../public/fonts/Paperlogy-5Medium.ttf",
   display: "swap",
 })
 
-// 1. 정적 경로 생성
+// 코드 하이라이팅 옵션
+const prettyCodeOptions = {
+  theme: "one-dark-pro",
+  keepBackground: false,
+}
+
 export async function generateStaticParams() {
   const posts = getProjectPosts()
   return posts.map((post) => ({ slug: post.slug }))
 }
 
-// 2. 메타데이터 생성
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  
   const { frontmatter } = getProjectBySlug(slug)
   if (!frontmatter) return { title: "Project Not Found" }
 
@@ -32,70 +39,71 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-// 3. 페이지 컴포넌트
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  // getProjectBySlug는 { frontmatter, content }를 반환한다고 가정합니다 (업로드된 파일 기준)
   const { frontmatter, content } = getProjectBySlug(slug)
 
   if (!frontmatter) notFound()
 
+  // 날짜 표시
   const dateDisplay = frontmatter.date instanceof Date 
     ? frontmatter.date.toLocaleDateString("ko-KR") 
     : frontmatter.date;
 
   return (
-    <div className="relative max-w-[1100px] mx-auto px-6">
-      {/* 상단 네비게이션 (기존 Regular 폰트) */}
+    // [1] 상단 여백 축소 및 하단 여백 확보 (pt-8 pb-20)
+    <div className="relative max-w-[1100px] mx-auto px-6 pb-20">
+      
+      {/* 상단 네비게이션 */}
       <div className="pt-8 pb-6">
         <Link
           href="/projects"
           className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-[#7c9070] transition-colors"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          목록으로 돌아가기
+          목록으로 돌아가기 {/* [2] 한글화 확인 */}
         </Link>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-12">
         <article className="min-w-0">
           <header className="mb-10 border-b border-gray-100 pb-10">
-            {/* 태그 (기존 Regular 폰트) */}
+            {/* [3] 뱃지: 말차색 배경 + 흰색 글씨 + 진하게(font-bold) */}
             <div className="flex flex-wrap gap-2 mb-6">
               {frontmatter.tags?.map((tag: string) => (
                 <span
                   key={tag}
-                  className="px-3 py-1.5 text-sm font-semibold text-white bg-[#7c9070] rounded-full shadow-sm"
+                  className="px-3 py-1.5 text-sm font-bold text-white bg-[#7c9070] rounded-full shadow-sm"
                 >
                   {tag}
                 </span>
               ))}
             </div>
 
-            {/* [NEW] 제목: Medium 폰트 적용 */}
+            {/* 제목 (Medium 폰트) */}
             <h1 className={`text-4xl font-bold text-[#333333] mb-4 leading-tight ${paperlogyMedium.className}`}>
               {frontmatter.title}
             </h1>
             
-            {/* 설명 (기존 Regular 폰트) */}
             <p className="text-xl text-gray-500 font-medium mb-6 leading-relaxed">
               {frontmatter.description}
             </p>
 
-            {/* 날짜 및 버튼들 (기존 Regular 폰트) */}
             <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 border-t border-gray-100 pt-6">
+              {/* 날짜 */}
               <div className="flex items-center font-medium">
                 <Calendar className="mr-2 h-5 w-5 text-[#7c9070]" />
                 {dateDisplay}
               </div>
 
+              {/* [4] 버튼: 크기 확대 (px-6 py-3, text-base) */}
               <div className="flex items-center gap-3 ml-auto sm:ml-0">
                 {frontmatter.github && (
                   <a
                     href={frontmatter.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-4 py-2 rounded-lg bg-gray-900 text-white font-medium hover:bg-gray-700 transition-all hover:scale-105 active:scale-95"
+                    className="inline-flex items-center px-6 py-3 rounded-lg bg-gray-900 text-white text-base font-bold hover:bg-gray-700 transition-all hover:scale-105 active:scale-95"
                   >
                     <Github className="mr-2 h-5 w-5" />
                     GitHub
@@ -106,7 +114,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     href={frontmatter.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-700 font-medium hover:border-[#7c9070] hover:text-[#7c9070] transition-all hover:scale-105 active:scale-95"
+                    className="inline-flex items-center px-6 py-3 rounded-lg border border-gray-200 bg-white text-gray-700 text-base font-bold hover:border-[#7c9070] hover:text-[#7c9070] transition-all hover:scale-105 active:scale-95"
                   >
                     <Globe className="mr-2 h-5 w-5" />
                     Live Demo
@@ -129,10 +137,20 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             </div>
           )}
 
-          {/* [NEW] 본문: Medium 폰트 적용 */}
+          {/* 본문 (플러그인 적용된 MDXRemote) */}
           <div className={`prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-img:rounded-xl ${paperlogyMedium.className}`}>
-             {/* 업로드하신 파일이 CompileMDX를 사용하므로 유지합니다 */}
-             <CompileMDX source={content} />
+            <MDXRemote 
+               source={content} 
+               options={{
+                 mdxOptions: {
+                   remarkPlugins: [remarkGfm],
+                   rehypePlugins: [
+                     rehypeSlug,
+                     [rehypePrettyCode, prettyCodeOptions]
+                   ],
+                 },
+               }}
+             />
           </div>
         </article>
 
