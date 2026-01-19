@@ -4,29 +4,12 @@ import { ArrowLeft, Calendar } from "lucide-react"
 import { getBlogPost, getBlogPosts } from "@/lib/mdx"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import TableOfContents from "@/components/toc"
+import rehypeSlug from "rehype-slug" // [NEW] 플러그인 임포트
 
-// 정적 경로 생성
-export async function generateStaticParams() {
-  const posts = getBlogPosts()
-  return posts.map((post) => ({ slug: post.slug }))
-}
+// ... (generateStaticParams, generateMetadata는 기존 그대로 유지) ...
 
-// 메타데이터 생성 (Next.js 15: params는 Promise입니다)
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params // [수정] await로 기다림
-  const post = await getBlogPost(slug)
-  
-  if (!post) return { title: "Post Not Found" }
-
-  return {
-    title: `${post.title} | minari0v0`,
-    description: post.excerpt,
-  }
-}
-
-// 상세 페이지 컴포넌트 (Next.js 15: params는 Promise입니다)
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params // [수정] await로 기다림
+  const { slug } = await params
   const post = await getBlogPost(slug)
 
   if (!post) {
@@ -54,7 +37,6 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         <article className="min-w-0">
           {/* 헤더 섹션 */}
           <header className="mb-10 border-b border-gray-100 pb-10">
-            {/* 태그 표시 */}
             <div className="flex flex-wrap gap-2 mb-6">
               {post.tags?.map((tag: string) => (
                 <span
@@ -78,7 +60,15 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
 
           {/* 본문 컨텐츠 (MDX) */}
           <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-img:rounded-xl">
-             <MDXRemote source={post.content} />
+            {/* ▼▼▼ [수정] options에 rehype-slug 플러그인 추가 ▼▼▼ */}
+             <MDXRemote 
+               source={post.content} 
+               options={{
+                 mdxOptions: {
+                   rehypePlugins: [rehypeSlug],
+                 },
+               }}
+             />
           </div>
         </article>
 
