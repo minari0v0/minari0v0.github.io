@@ -91,6 +91,7 @@
     
     /* 스크롤바가 헤더에 가려지지 않게 여백 주기 */
     scroll-padding-top: 100px; 
+    overflow-y: scroll; /*스크롤바 공간 강제 예약*/
   }
   * {
     @apply border-border outline-ring/50;
