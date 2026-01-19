@@ -25,13 +25,13 @@ interface Post {
 
 export default function HomePage() {
   const allProjects = getProjectPosts() as unknown as Project[]
-  const featuredProjects = allProjects.slice(0, 6)
+  const featuredProjects = allProjects.slice(0, 6) // 캐러셀용 6개
   
   const recentPosts = getRecentPosts(6) as unknown as Post[]
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
+      {/* Hero Section: 원래 디자인으로 복구 (녹색 박스 제거) */}
       <section className="relative h-[450px] w-full overflow-hidden">
         <Image
           src="/cozy-desk-setup-with-matcha-green-aesthetic-warm-l.jpg"
@@ -41,14 +41,17 @@ export default function HomePage() {
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        
         <div className="absolute inset-0 flex flex-col justify-end pb-8 md:pb-12">
           <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
           <div className="relative max-w-[1100px] mx-auto w-full px-6">
-            <div className="inline-block rounded-2xl bg-matcha-500 border-2 border-matcha-600 px-6 py-4 shadow-md">
-              <h1 className="text-2xl md:text-3xl font-bold text-white">
-                minari0v0's Archive
-              </h1>
-            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight drop-shadow-md">
+              minari0v0's Archive
+            </h1>
+            <p className="mt-2 text-lg text-gray-200 font-medium opacity-90">
+              기록하고, 성장하고, 공유하는 공간
+            </p>
           </div>
         </div>
       </section>
@@ -56,7 +59,6 @@ export default function HomePage() {
       {/* 1. 프로젝트 섹션 */}
       <section className="max-w-[1100px] mx-auto w-full px-6 py-16">
         <ContentCarousel title="프로젝트" viewAllHref="/projects">
-          {/* [변경] renderItem 대신 여기서 직접 map을 돌려서 Children으로 넘깁니다 */}
           {featuredProjects.map((project) => (
             <ProjectCard
               key={project.slug}
@@ -75,7 +77,6 @@ export default function HomePage() {
       {/* 2. 스토리 섹션 */}
       <section className="max-w-[1100px] mx-auto w-full px-6 py-16 border-t border-gray-100">
         <ContentCarousel title="최신 스토리" viewAllHref="/blog">
-          {/* [변경] 여기도 직접 map으로 Children 전달 */}
           {recentPosts.map((post) => (
             <ProjectCard
               key={post.id}
