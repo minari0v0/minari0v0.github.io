@@ -6,8 +6,7 @@ import localFont from "next/font/local"
 import { SearchBar } from "./search-bar"
 import { cn } from "@/lib/utils"
 
-// [1] 폰트 변경: KCC 무럭무럭체 로드
-// (public/fonts 폴더에 파일이 있어야 합니다!)
+// 폰트 설정 (경로 확인 필수)
 const murukFont = localFont({
   src: "../app/fonts/KCC-Murukmuruk.ttf",
   display: "swap",
@@ -29,21 +28,21 @@ export function Navbar() {
         {/* [왼쪽 그룹] 로고 + 네비게이션 */}
         <div className="flex items-center gap-8">
           
-          {/* [2] 로고 디자인: 베이지 배경 + 짙은 초록 글씨 + 라운드 처리 */}
+          {/* 로고 */}
           <Link 
             href="/" 
             className={cn(
-              "flex items-center justify-center px-3 py-1.5 rounded-xl transition-transform hover:scale-105 active:scale-95", // 박스 형태 & 인터랙션
-              "bg-[#F5F5F0]", // 폰트 배경 색상 (베이지)
-              murukFont.className // 무럭무럭체 적용
+              "flex items-center justify-center px-3 py-1.5 rounded-xl transition-transform hover:scale-105 active:scale-95",
+              "bg-[#F5F5F0]", 
+              murukFont.className
             )}
           >
-            <span className="text-2xl pt-1 text-[#5A7863]"> {/* 짙은 초록 글씨 + 시각적 높이 보정(pt-1) */}
+            <span className="text-2xl pt-1 text-[#5A7863]">
               minari0v0
             </span>
           </Link>
 
-          {/* [3] 네비게이션: 로고 바로 옆으로 이동 */}
+          {/* 네비게이션 */}
           <div className="flex items-center gap-6">
             {navItems.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
@@ -53,10 +52,11 @@ export function Navbar() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-[#7c9070]", // 호버 시 말차색
+                    "text-sm font-medium transition-colors",
+                    // [수정] 호버 클래스를 비활성 상태일 때만 명시적으로 적용하여 충돌 방지
                     isActive 
-                      ? "text-[#7c9070] font-bold" // 활성: 말차색 + 굵게
-                      : "text-gray-500"            // 비활성: 회색
+                      ? "text-[#7c9070] font-bold" 
+                      : "text-gray-500 hover:text-[#7c9070]" 
                   )}
                 >
                   {item.label}
