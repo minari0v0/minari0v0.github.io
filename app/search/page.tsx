@@ -1,13 +1,21 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, Suspense, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { useSearchParams } from "next/navigation"
 import { Search } from "lucide-react"
 import { projects, blogPosts } from "@/lib/data"
 
-export default function SearchPage() {
-  const [query, setQuery] = useState("")
+function SearchPageComponent() {
+  const searchParams = useSearchParams()
+  const initialQuery = searchParams.get("q") || ""
+  const [query, setQuery] = useState(initialQuery)
+
+  // If the query param changes, update the state
+  useEffect(() => {
+    setQuery(initialQuery)
+  }, [initialQuery])
 
   const results = useMemo(() => {
     if (!query.trim()) return { projects: [], posts: [] }
@@ -130,4 +138,13 @@ function NoResultsState() {
       </p>
     </div>
   )
+}
+
+
+export default function SearchPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <SearchPageComponent />
+        </Suspense>
+    )
 }

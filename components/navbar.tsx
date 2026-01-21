@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import localFont from "next/font/local"
-import { Search } from "lucide-react"
+import { SearchBar } from "./search-bar"
 import { cn } from "@/lib/utils"
 
 // [1] 폰트 변경: KCC 무럭무럭체 로드
@@ -68,17 +68,7 @@ export function Navbar() {
 
         {/* [오른쪽 그룹] 검색 버튼 */}
         <div className="flex items-center">
-          <Link
-            href="/search"
-            className={cn(
-              "p-2 rounded-md transition-colors",
-              "text-gray-400 hover:text-[#7c9070] hover:bg-[#7c9070]/10", // [4] 호버 시 말차색 텍스트 & 연한 배경
-              pathname === "/search" && "text-[#7c9070] bg-[#7c9070]/10"
-            )}
-            aria-label="Search"
-          >
-            <Search className="w-5 h-5" />
-          </Link>
+          <SearchBar />
         </div>
 
       </nav>
