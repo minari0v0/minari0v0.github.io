@@ -10,28 +10,29 @@ interface Project {
   title: string
   description: string
   thumbnail?: string
-  date: string | Date
+  startDate: string | Date
+  endDate?: string | Date
   tags: string[]
 }
 
 interface Post {
-  slug: string // id -> slug로 변경
+  slug: string
   title: string
   excerpt: string
   image: string
-  date: string | Date // 날짜 객체 호환
+  date: string | Date
 }
 
 export default function HomePage() {
   const allProjects = getProjectPosts() as unknown as Project[]
-  const featuredProjects = allProjects.slice(0, 6) // 캐러셀용 6개
+  const featuredProjects = allProjects.slice(0, 6)
   
   const allPosts = getBlogPosts()
   const recentPosts = allPosts.slice(0, 6) as unknown as Post[]
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section: 원래 디자인으로 복구 (녹색 박스 제거) */}
+      {/* Hero Section */}
       <section className="relative h-[450px] w-full overflow-hidden">
         <Image
           src="/cozy-desk-setup-with-matcha-green-aesthetic-warm-l.jpg"
@@ -66,7 +67,8 @@ export default function HomePage() {
               title={project.title}
               description={project.description}
               image={project.thumbnail || "/placeholder.svg"}
-              date={project.date instanceof Date ? project.date.toLocaleDateString("ko-KR") : project.date}
+              startDate={project.startDate}
+              endDate={project.endDate}
               tags={project.tags}
               href={`/projects/${project.slug}`}
             />
@@ -80,13 +82,14 @@ export default function HomePage() {
           {recentPosts.map((post) => (
             <ProjectCard
               key={post.slug}
-              id={post.slug} // id 대신 slug 사용
+              id={post.slug}
               title={post.title}
               description={post.excerpt}
               image={post.image || "/placeholder.svg"}
-              // 날짜 변환 로직 추가
-              date={post.date instanceof Date ? post.date.toLocaleDateString("ko-KR") : post.date}
-              href={`/blog/${post.slug}`} // 링크도 slug 기반으로 변경
+              // [수정] date 속성 제거 -> startDate(필수값 채우기용) + displayDate(보여주기용) 전달
+              startDate={post.date} 
+              displayDate={post.date instanceof Date ? post.date.toLocaleDateString("ko-KR") : post.date}
+              href={`/blog/${post.slug}`}
             />
           ))}
         </ContentCarousel>

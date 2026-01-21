@@ -12,7 +12,8 @@ interface Project {
   title: string
   description: string
   thumbnail?: string
-  date: string | Date
+  startDate: string | Date
+  endDate?: string | Date
   tags: string[]
 }
 
@@ -37,8 +38,8 @@ export default function ProjectsPage() {
             title={project.title}
             description={project.description}
             image={project.thumbnail || "/placeholder.svg"}
-            // ▼▼▼ [수정] 날짜 객체를 문자열로 변환 ▼▼▼
-            date={project.date instanceof Date ? project.date.toLocaleDateString("ko-KR") : project.date}
+            startDate={project.startDate} // [수정] date 대신 startDate
+            endDate={project.endDate}
             tags={project.tags}
             href={`/projects/${project.slug}`}
           />
