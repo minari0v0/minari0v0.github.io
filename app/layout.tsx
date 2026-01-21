@@ -7,8 +7,13 @@ import { Footer } from "@/components/footer"
 import "./globals.css"
 import "katex/dist/katex.min.css";
 
+// 폰트 설정 (app/fonts 폴더 안에 파일이 있어야 함)
 const paperlogy = localFont({
-  src: "./fonts/Paperlogy-4Regular.ttf",
+  src: [
+    { path: "./fonts/Paperlogy-4Regular.ttf", weight: "400", style: "normal" },
+    { path: "./fonts/Paperlogy-5Medium.ttf", weight: "500", style: "normal" },
+    { path: "./fonts/Paperlogy-7Bold.ttf", weight: "700", style: "normal" },
+  ],
   variable: "--font-paperlogy",
   display: "swap",
 })
@@ -25,7 +30,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${paperlogy.variable} font-sans antialiased min-h-screen flex flex-col`}>
+      {/* [수정] 'font-sans' 클래스 제거! 
+         이제 globals.css의 body 스타일이 적용되어 Paperlogy 폰트가 나옵니다.
+      */}
+      <body className={`${paperlogy.variable} antialiased min-h-screen flex flex-col`}>
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

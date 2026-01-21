@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import localFont from "next/font/local"
 
 const paperlogyBold = localFont({
-  src: "../public/fonts/Paperlogy-7Bold.ttf",
+  src: "../app/fonts/Paperlogy-7Bold.ttf",
   display: "swap",
 })
 

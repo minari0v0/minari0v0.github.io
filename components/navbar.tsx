@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 // [1] 폰트 변경: KCC 무럭무럭체 로드
 // (public/fonts 폴더에 파일이 있어야 합니다!)
 const murukFont = localFont({
-  src: "../public/fonts/KCC-Murukmuruk.ttf",
+  src: "../app/fonts/KCC-Murukmuruk.ttf",
   display: "swap",
 })
 
