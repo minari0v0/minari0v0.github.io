@@ -21,6 +21,13 @@ export default function ProjectsPage() {
   // any 타입 대신 Project[]로 단언하여 안전하게 사용
   const posts = getProjectPosts() as unknown as Project[]
 
+  // [수정] 내림차순 정렬 (종료일 기준)
+  const sortedPosts = posts.sort((a, b) => {
+    const dateA = a.endDate ? new Date(a.endDate).getTime() : new Date().getTime()
+    const dateB = b.endDate ? new Date(b.endDate).getTime() : new Date().getTime()
+    return dateB - dateA // 내림차순
+  })
+
   return (
     <div className="max-w-[1100px] mx-auto px-6 py-12">
       {/* Header */}
@@ -31,14 +38,15 @@ export default function ProjectsPage() {
 
       {/* 3-column Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((project) => (
+        {/* [수정] posts 대신 sortedPosts를 map으로 돌림 */}
+        {sortedPosts.map((project) => (
           <ProjectCard
             key={project.slug}
             id={project.slug}
             title={project.title}
             description={project.description}
             image={project.thumbnail || "/placeholder.svg"}
-            startDate={project.startDate} // [수정] date 대신 startDate
+            startDate={project.startDate}
             endDate={project.endDate}
             tags={project.tags}
             href={`/projects/${project.slug}`}

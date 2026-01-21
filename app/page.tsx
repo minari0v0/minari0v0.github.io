@@ -25,6 +25,14 @@ interface Post {
 
 export default function HomePage() {
   const allProjects = getProjectPosts() as unknown as Project[]
+  // [수정] 내림차순 정렬 (종료일 기준)
+  // 종료일이 없으면(진행 중) 현재 날짜로 취급하여 맨 위에 둠
+  const sortedProjects = allProjects.sort((a, b) => {
+    const dateA = a.endDate ? new Date(a.endDate).getTime() : new Date().getTime()
+    const dateB = b.endDate ? new Date(b.endDate).getTime() : new Date().getTime()
+    return dateB - dateA // B - A = 내림차순 (최신순)
+  })
+
   const featuredProjects = allProjects.slice(0, 6)
   
   const allPosts = getBlogPosts()
@@ -48,7 +56,7 @@ export default function HomePage() {
 
           <div className="relative max-w-[1100px] mx-auto w-full px-6">
             <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight drop-shadow-md">
-              minari0v0's Archive
+              minari0v0's Blog
             </h1>
             <p className="mt-2 text-lg text-gray-200 font-medium opacity-90">
               기록하고, 성장하고, 공유하는 공간
