@@ -1,10 +1,10 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ArrowLeft, Calendar } from "lucide-react"
-import { getBlogPost, getBlogPosts, getAdjacentPosts } from "@/lib/mdx"
+import { getBlogPost, getBlogPosts, getRelatedPosts } from "@/lib/mdx"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import TableOfContents from "@/components/toc"
-import { PostNavigation } from "@/components/post-navigation"
+import { RelatedPosts } from "@/components/related-posts"
 
 import remarkGfm from "remark-gfm"
 import rehypeSlug from "rehype-slug"
@@ -40,8 +40,8 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
 
   if (!post) notFound()
 
-  // 인접 포스트 가져오기
-  const { prev, next } = getAdjacentPosts(slug, "blog")
+  // 연관 포스트 가져오기
+  const relatedPosts = getRelatedPosts(slug, post.category)
 
   const dateDisplay = post.date instanceof Date 
     ? post.date.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })
@@ -53,7 +53,6 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         <article className="min-w-0">
           
           <header className="mb-10 border-b border-gray-100 pb-10">
-            {/* 뱃지 디자인 (진한 초록색) */}
             <div className="flex flex-wrap gap-2 mb-6">
               {post.tags?.map((tag: string) => (
                 <span
@@ -75,7 +74,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             </div>
           </header>
           
-          {/* [삭제됨] 여기에 있던 큰 썸네일 영역 제거 완료 */}
+          {/* [삭제됨] 썸네일 영역 깔끔하게 제거 완료! */}
 
           <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-img:rounded-xl">
              <MDXRemote 
@@ -93,7 +92,8 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
              />
           </div>
 
-          <PostNavigation prevPost={prev} nextPost={next} basePath="blog" />
+          {/* 연관 글 섹션 */}
+          <RelatedPosts category={post.category} posts={relatedPosts} />
 
           <div className="mt-10 flex justify-center">
             <Link

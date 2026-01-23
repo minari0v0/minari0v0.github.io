@@ -7,7 +7,7 @@ const projectsDirectory = path.join(process.cwd(), "content", "projects")
 const BLOG_PATH = path.join(process.cwd(), "content", "blog")
 
 // ---------------------------------------------------------
-// [공통] 앞/뒤 포스트 찾기
+// [공통] 앞/뒤 포스트 찾기 (이전/다음 글)
 // ---------------------------------------------------------
 export function getAdjacentPosts(currentSlug: string, type: "projects" | "blog") {
   const posts = type === "projects" ? getProjectPosts() : getBlogPosts()
@@ -19,6 +19,22 @@ export function getAdjacentPosts(currentSlug: string, type: "projects" | "blog")
   const prevPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null
 
   return { prev: prevPost, next: nextPost }
+}
+
+// ---------------------------------------------------------
+// [NEW] 연관 포스트 찾기 (같은 카테고리)
+// ---------------------------------------------------------
+export function getRelatedPosts(currentSlug: string, category: string) {
+  const allPosts = getBlogPosts()
+
+  // 1. 같은 카테고리이면서 
+  // 2. 현재 보고 있는 글(currentSlug)은 제외하고
+  // 3. 최신순으로 정렬된 리스트 반환
+  const related = allPosts
+    .filter((post) => post.category === category && post.slug !== currentSlug)
+    .slice(0, 4) // 최대 4개까지만 보여줌 (너무 많으면 지저분하니까)
+
+  return related
 }
 
 // ---------------------------------------------------------
@@ -42,6 +58,7 @@ export function getProjectPosts() {
     } as any
   })
 
+  // 최신순 정렬 (endDate 기준)
   return allProjects.sort((a, b) => {
     const dateA = a.endDate ? new Date(a.endDate).getTime() : new Date().getTime()
     const dateB = b.endDate ? new Date(b.endDate).getTime() : new Date().getTime()
@@ -62,7 +79,7 @@ export function getProjectBySlug(slug: string) {
 }
 
 // ---------------------------------------------------------
-// 2. 블로그 관련 (업그레이드됨!)
+// 2. 블로그 관련
 // ---------------------------------------------------------
 export interface BlogPost {
   slug: string
@@ -86,10 +103,7 @@ export function getBlogPosts(): BlogPost[] {
       const source = fs.readFileSync(path.join(BLOG_PATH, file), "utf-8")
       const { data } = matter(source)
 
-      // [핵심 수정] 카테고리 자동 결정 로직
-      // 1. category 필드가 있으면 그거 씀
-      // 2. 없으면 tags의 첫 번째 값을 씀
-      // 3. 그것도 없으면 "General"
+      // 카테고리 자동 결정
       const category = data.category || (data.tags && data.tags.length > 0 ? data.tags[0] : "General");
 
       return {
@@ -119,7 +133,6 @@ export async function getBlogPost(slug: string) {
     .replace(/<img([^>]+)>/g, "<img$1 />")
     .replace(/<hr>/g, "<hr />");
 
-  // 상세 페이지에서도 동일한 카테고리 로직 적용
   const category = data.category || (data.tags && data.tags.length > 0 ? data.tags[0] : "General");
 
   return {
@@ -127,7 +140,7 @@ export async function getBlogPost(slug: string) {
     ...data,
     title: data.title,
     excerpt: data.excerpt,
-    category: category, // [수정] 태그 기반 카테고리 적용
+    category: category,
     tags: data.tags || [],
     date: new Date(data.date),
     image: data.image || data.coverImage || "/placeholder.svg",
