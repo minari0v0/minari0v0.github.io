@@ -53,6 +53,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         <article className="min-w-0">
           
           <header className="mb-10 border-b border-gray-100 pb-10">
+            {/* 태그 (기존 유지) */}
             <div className="flex flex-wrap gap-2 mb-6">
               {post.tags?.map((tag: string) => (
                 <span
@@ -64,18 +65,27 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               ))}
             </div>
 
+            {/* 제목 (기존 유지) */}
             <h1 className="text-4xl font-bold text-[#333333] mb-4 leading-tight break-keep">
               {post.title}
             </h1>
             
+            {/* [수정] 날짜 옆에 카테고리 추가 */}
             <div className="flex items-center text-gray-500 font-medium mt-4">
               <Calendar className="mr-2 h-5 w-5 text-[#7c9070]" />
-              {dateDisplay}
+              <span>{dateDisplay}</span>
+              
+              {/* 구분점 */}
+              <span className="mx-3 text-gray-300">·</span>
+              
+              {/* 카테고리 */}
+              <span className="text-[#7c9070] font-bold">
+                {post.category || "General"}
+              </span>
             </div>
           </header>
           
-          {/* [삭제됨] 썸네일 영역 깔끔하게 제거 완료! */}
-
+          {/* 본문 영역 */}
           <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-img:rounded-xl">
              <MDXRemote 
                source={post.content} 
