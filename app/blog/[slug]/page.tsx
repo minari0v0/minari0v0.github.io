@@ -5,6 +5,7 @@ import { getBlogPost, getBlogPosts, getRelatedPosts } from "@/lib/mdx"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import TableOfContents from "@/components/toc"
 import { RelatedPosts } from "@/components/related-posts"
+import { Comments } from "@/components/comments" // [NEW] 댓글 컴포넌트 추가
 
 import remarkGfm from "remark-gfm"
 import rehypeSlug from "rehype-slug"
@@ -104,6 +105,9 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
 
           {/* 연관 글 섹션 */}
           <RelatedPosts category={post.category} posts={relatedPosts} />
+
+          {/* [NEW] 댓글 기능 추가 */}
+          <Comments />
 
           <div className="mt-10 flex justify-center">
             <Link
