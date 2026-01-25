@@ -11,6 +11,7 @@ import rehypePrettyCode from "rehype-pretty-code"
 import { ProjectInfo } from "@/components/project-info"
 import { GithubButton } from "@/components/ui/github-button"
 import { ProjectNavigation } from "@/components/project-navigation"
+import { Comments } from "@/components/comments"
 
 const prettyCodeOptions = {
   theme: "one-dark-pro",
@@ -133,6 +134,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
           {/* 프로젝트 네비게이션 (이전/다음) */}
           <ProjectNavigation prevProject={prev} nextProject={next} />
+
+          {/* [NEW] 댓글 기능 추가 */}
+                  <Comments />
 
         </article>
 

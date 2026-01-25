@@ -5,78 +5,267 @@ thumbnail: /placeholder.svg
 startDate: 2023-10-01
 endDate: 2023-12-31 
 type: "개인 프로젝트"
-tags: [Java, Swing, Socket, MySQL, TCP/IP, OOP]
+tags: [Java, Swing, Socket, MySQL, TCP/IP, Multi-threading, OOP]
 github: https://github.com/minari0v0/java_omok
 ---
 
-# Java 소켓 기반 온라인 오목 게임
 
+# Java 소켓 기반 온라인 오목 게임
 
 ## 프로젝트 개요
 
-Java 소켓 통신과 GUI 라이브러리인 Swing을 활용하여 개발한 멀티플레이어 온라인 오목 게임입니다. 단순한 오목 게임 구현을 넘어, 실시간 채팅, 랭킹 시스템, 사용자 정보 관리, 관리자 기능 등 다양한 부가 기능을 통해 완성도 높은 데스크톱 애플리케이션을 구현하는 것을 목표로 했습니다.
+순수 Java 기술 스택만으로 온라인 멀티플레이어 오목 게임을 구현한 풀스택(Full-Stack) 데스크톱 애플리케이션입니다. Java의 소켓(Socket) 통신을 이용한 **멀티 스레딩 서버**를 직접 구축하고, **Java Swing**의 그래픽 기능을 활용하여 반응형 GUI 클라이언트를 개발했습니다.
 
-### 핵심 기능
+단순한 게임 구현을 넘어, 실시간 채팅, 랭킹 시스템, 외부 API 연동, 관리자용 대시보드 등 실제 서비스에 필요한 다양한 기능을 포함하여 백엔드부터 프론트엔드, 데이터베이스까지 아우르는 종합적인 개발 경험을 목표로 했습니다.
 
-- **실시간 멀티플레이**: 소켓(TCP/IP) 통신을 통해 여러 사용자가 동시에 접속하여 다른 사람과 오목을 두거나 관전할 수 있습니다.
-- **게임방 시스템**: 난수 코드를 이용한 비공개 방 생성, 비밀번호 설정 기능으로 친구와 비공개로 게임을 즐길 수 있습니다.
-- **다양한 채팅 기능**:
-    - 로비/게임방 채팅: 여러 사용자와 자유롭게 대화할 수 있는 전체 채팅 및 게임방 내 채팅 기능을 제공합니다.
-    - 1:1 채팅: 특정 사용자를 우클릭하여 개인적인 대화를 나눌 수 있습니다.
-    - 채팅 부가기능: 이모티콘, 채팅 테마 변경, 대화 내용 검색 기능을 통해 사용자 경험을 향상시켰습니다.
-- **커뮤니티 및 정보**:
-    - 랭킹 시스템: 승패 기록을 기반으로 랭킹을 산정하고 금, 은, 동메달로 시각화하여 보여줍니다.
-    - 날씨 API 연동: 공공 데이터 API를 활용하여 로그인 화면과 로비에서 지역별 날씨 정보를 제공합니다.
-    - 사용자 프로필: 회원가입 시 설정한 프로필 이미지(오목알로 사용)와 전적 등 상세 정보를 확인할 수 있습니다.
-- **관리자 기능**:
-    - 회원 관리: 관리자용 GUI를 통해 전체 회원 정보를 조회, 추가, 수정, 삭제할 수 있습니다.
-    - 채팅 모니터링 및 관리: 실시간 로비 채팅 내용을 확인하고, 부적절한 메시지를 삭제하거나 복구할 수 있습니다.
 
-![메인 화면](https://raw.githubusercontent.com/Rafale-DV/Team-project-1/master/img/%EB%A9%94%EC%9D%B8.png)
+## 핵심 기능
+
+-   **실시간 멀티플레이어 게임**: TCP/IP 소켓 통신 기반의 서버를 통해 여러 사용자가 동시에 접속하여 다른 유저와 오목을 두거나 관전할 수 있습니다.
+-   **동적 게임방 시스템**: 난수 코드를 이용한 방 생성, 비밀번호를 설정한 비공개 방 생성, 관전자 허용 여부 등 다양한 옵션을 제공합니다.
+-   **풍부한 채팅 경험**:
+    -   **커스텀 UI**: 채팅 메시지를 말풍선 형태로 그려주는 `ChatBubblePanel`을 직접 구현하여 가독성을 높였습니다.
+    -   **다양한 채팅**: 로비 전체 채팅, 게임방 채팅, 1:1 개인 채팅을 지원하며, 이모티콘과 채팅창 테마 변경 기능도 제공합니다.
+    -   **부가 기능**: 1:1 채팅방 내에서 특정 키워드로 대화 내용을 검색하는 기능을 구현했습니다.
+-   **커뮤니티 및 편의 기능**:
+    -   **랭킹 시스템**: DB와 연동하여 승률 기반의 랭킹을 산정하고, `CustomPanel`을 활용해 금/은/동메달 배경을 동적으로 렌더링하는 팝업을 제공합니다.
+    -   **날씨 위젯**: 공공 데이터 포털의 날씨 API를 HTTP로 호출하여 사용자가 위치한 동네의 날씨 정보를 로그인 화면과 로비에 표시합니다.
+    -   **사용자 프로필**: 회원가입 시 `thumbnailator` 라이브러리와 직접 구현한 `CropImageWindow`를 통해 프로필 이미지를 편집/저장하고, 이 이미지가 오목돌로 사용됩니다.
+-   **관리자 대시보드 (`ChatServerGUI`)**:
+    -   **통합 관리**: 서버 로그 실시간 모니터링, 전체 회원 정보 조회/수정/삭제/복원(Soft-delete), 접속 중인 유저 강제 추방 등 서버 및 사용자 관리를 위한 GUI 툴을 제공합니다.
+    -   **데이터 관리**: 관리자가 특정 유저의 채팅 기록을 조회하고, 부적절한 메시지를 삭제(백업 테이블로 이동)하거나 복원할 수 있습니다.
 
 ---
 
-## 기술 스택
+## 프로젝트 구조
+```
+.
+├── src
+│   ├── main
+│   │   ├── java
+│   │   │   ├── client      # 클라이언트 측 로직 및 UI
+│   │   │   ├── server      # 서버 측 로직 및 통신
+│   │   │   ├── GUI         # 공용 GUI 컴포넌트
+│   │   │   └── img         # UI에 사용된 이미지 및 리소스
+│   │   └── webapp
+├── build                   # 컴파일된 클래스 파일
+├── ...
+└── README.md
+```
 
-### Backend & Core
-- **Java**: 프로젝트의 핵심 언어로, 객체 지향 프로그래밍(OOP) 원칙에 따라 전체 시스템을 설계했습니다.
-- **Java Socket (TCP/IP)**: 클라이언트와 서버 간의 실시간 양방향 통신을 구현하여 멀티플레이 환경을 구축했습니다. 각 클라이언트의 요청을 안정적으로 처리하기 위해 멀티 스레딩 방식을 적용했습니다.
-- **MySQL**: 사용자 정보, 게임 전적, 채팅 메시지 등 모든 데이터를 저장하고 관리하는 데이터베이스로 사용했습니다.
+---
 
-### Frontend
-- **Java Swing**: 자바의 표준 GUI 라이브러리를 사용하여 사용자가 상호작용할 수 있는 데스크톱 애플리케이션 화면을 구성했습니다. `JPanel`, `JFrame`, `JScrollPane` 등 다양한 컴포넌트를 커스터마이징하여 사용자 경험을 개선했습니다.
+## 기술 스택 및 아키텍처
 
-### API & ETC
-- **공공 데이터 포털 (날씨 API)**: 사용자의 위치에 따른 실시간 날씨 정보를 가져와 화면에 표시하는 데 사용했습니다.
-- **Lombok**: `@Getter`, `@Setter`, `@Data` 등의 어노테이션을 활용하여 DTO/VO 클래스의 보일러플레이트 코드를 줄이고 코드 가독성을 높였습니다.
+#### 1. 백엔드 (Backend)
 
-![게임 진행](https://raw.githubusercontent.com/Rafale-DV/Team-project-1/master/img/%EA%B2%8C%EC%9E%84%EC%A7%84%ED%96%89.png)
+-   **`Java Socket (TCP/IP)`**: 서버의 핵심 통신 기술로, 클라이언트의 연결 요청을 받고 데이터를 주고받는 역할을 합니다.
+-   **`Multi-threaded Server`**: `ChatServer`가 클라이언트 접속 시마다 `ClientHandler` 스레드를 생성하는 **1-Client-1-Thread** 모델을 적용했습니다. 이를 통해 여러 클라이언트의 동시 요청을 안정적으로 처리할 수 있습니다.
+-   **`Custom Protocol`**: "CRTROOM", "PRIVCHAT", "GAME:MOVE" 등과 같이 `|` 또는 공백으로 구분된 문자열 기반의 자체 프로토콜을 설계하여 클라이언트와 서버 간의 다양한 요청과 응답을 체계적으로 관리했습니다.
 
-## 데이터베이스 설계
+#### 2. 프론트엔드 (Frontend)
 
-MySQL을 사용하여 게임의 핵심 데이터를 관리했으며, 주요 테이블 구조는 다음과 같습니다.
+-   **`Java Swing`**: 모든 사용자 인터페이스를 Swing으로 구축했습니다. `JFrame`, `JPanel`, `JTable` 등 기본 컴포넌트뿐만 아니라, `paintComponent` 메소드를 오버라이드하여 UI를 직접 렌더링하는 다수의 커스텀 컴포넌트를 구현했습니다.
+    -   **`BoardLabel`**: 오목판의 격자와 격자점, 사용자의 프로필 이미지를 이용한 오목돌, 마우스 오버 시 미리보기 등을 직접 그려주는 핵심 게임 UI 컴포넌트입니다.
+    -   **`ChatBubblePanel`**: 메시지 길이와 이모티콘 유무에 따라 동적으로 크기가 변하는 말풍선 UI를 구현했습니다.
+    -   **`CustomScrollBarUI`**: 채팅창의 스크롤바 디자인을 커스터마이징하여 미적 완성도를 높였습니다.
+    -   **`FontLoader`**: `.ttf` 폰트 파일을 동적으로 로드하여 사용자 PC에 폰트가 설치되지 않아도 일관된 디자인을 제공하도록 했습니다.
 
-- **user / user_bin**: 사용자의 계정 정보(ID, PW), 닉네임, 전적(승/패), 프로필 이미지 등을 저장합니다. `user_bin`은 탈퇴한 회원의 정보를 백업하는 용도입니다.
-- **chat_messages / chat_messages_bin**: 사용자들이 나눈 채팅 메시지의 내용, 발신자, 수신자, 시간 등을 기록합니다. `chat_messages_bin`은 관리자에 의해 삭제된 메시지를 보관하여 복구할 수 있도록 설계되었습니다.
-- **ranking**: `user` 테이블의 전적 데이터를 바탕으로 주기적으로 순위를 갱신하고, 승률, 총 게임 수 등의 정보를 저장하여 랭킹 조회 시 빠른 응답이 가능하도록 했습니다.
+#### 3. 데이터베이스 (Database) & Persistence
+
+-   **`MySQL` & `JDBC`**: 사용자 정보, 게임 전적, 채팅 로그 등 모든 데이터를 MySQL에 저장하고, JDBC API를 통해 Java 애플리케이션과 연동했습니다.
+-   **`DAO (Data Access Object) Pattern`**: DB 연결을 담당하는 `DBmanager`, 유저 정보 관련 SQL을 모아둔 `UserInfoDb`, 채팅 메시지 관련 SQL을 모아둔 `MessageDbManager`로 역할을 분리하여 데이터 접근 로직을 캡슐화하고 코드의 유지보수성을 향상시켰습니다.
+-   **`Soft-delete`**: 관리자가 사용자나 채팅 메시지를 삭제할 때, 실제 DB에서 제거하는 대신 `_bin` 접미사가 붙은 백업 테이블로 데이터를 옮기도록 설계했습니다. 이를 통해 데이터의 실수 없는 관리와 복원 기능을 구현했습니다.
+
+#### 4. 외부 API 및 라이브러리
+
+-   **`Public Data Portal API`**: 기상청의 초단기예보 API를 HTTP로 호출하여 날씨 정보를 가져왔습니다.
+-   **`NaverMail API (javax.mail)`**: 비밀번호 찾기 기능 구현을 위해 Naver의 SMTP 서버를 통해 사용자에게 이메일을 발송하는 `NaverMailSender`를 구현했습니다.
+-   **`Thumbnailator`**: 프로필 이미지 업로드 시, 사용자가 원하는 영역을 정사각형으로 자르고 리사이징하는 데 사용된 이미지 처리 라이브러리입니다.
+
+---
+
+## 핵심 기술
+
+#### 1. 멀티 스레딩 서버 구현 (`ChatServer.java`)
+클라이언트가 접속할 때마다 새로운 `ClientHandler` 스레드를 생성하여, 여러 클라이언트의 요청을 동시에 처리하는 멀티 스레딩 서버의 핵심 로직입니다.
+```java
+// in ChatServer.java
+public void startServer() {
+    isRunning = true;
+    try {
+        serverSocket = new ServerSocket(12345);
+        System.out.println("<관리자> 채팅 서버가 시작되었어요..");
+
+        while (isRunning) {
+            try {
+                Socket clientSocket = serverSocket.accept(); // 클라이언트 접속 대기
+                System.out.println("<관리자> 새로운 클라이언트가 연결됐어요");
+                
+                // 클라이언트마다 별도의 스레드 생성 및 시작
+                ClientHandler clientHandler = new ClientHandler(this, clientSocket);
+                clients.add(clientHandler);
+                new Thread(clientHandler).start();
+
+            } catch (SocketException e) {
+                if (!isRunning) {
+                    System.out.println("<관리자> 서버가 종료되었어요.");
+                    break;
+                }
+                throw e;
+            }
+        }
+    } catch (IOException e) {
+        // ...
+    }
+}
+```
+
+#### 2. 오목 승리 판정 로직 (`Room.java`)
+특정 위치에 돌이 놓였을 때, 가로, 세로, 양 대각선 방향으로 같은 색의 돌이 5개 이상 연속되는지를 확인하여 승패를 판정하는 알고리즘입니다.
+```java
+// in server/Room.java
+private boolean checkWin(int x, int y, int stone) {
+    return checkDirection(x, y, 1, 0, stone) || // 가로
+           checkDirection(x, y, 0, 1, stone) || // 세로
+           checkDirection(x, y, 1, 1, stone) || // 대각선 ↘
+           checkDirection(x, y, 1, -1, stone);  // 대각선 ↗
+}
+
+private boolean checkDirection(int x, int y, int dx, int dy, int stone) {
+    int count = 1;
+
+    // 한 방향 체크
+    for (int i = 1; i < 5; i++) {
+        int nx = x + i * dx;
+        int ny = y + i * dy;
+        if (nx < 0 || nx >= gridSize || ny < 0 || ny >= gridSize || board[nx][ny] != stone) break;
+        count++;
+    }
+
+    // 반대 방향 체크
+    for (int i = 1; i < 5; i++) {
+        int nx = x - i * dx;
+        int ny = y - i * dy;
+        if (nx < 0 || nx >= gridSize || ny < 0 || ny >= gridSize || board[nx][ny] != stone) break;
+        count++;
+    }
+
+    return count >= 5; // 5개 이상 연결되면 승리
+}
+```
+
+#### 3. 커스텀 프로토콜 처리 (`ClientHandler.java`)
+클라이언트로부터 받은 문자열 메시지를 `startsWith` 메소드로 파싱하여, 약속된 동작을 수행하는 부분입니다. 이를 통해 채팅, 유저 정보 요청, 게임방 관리 등 다양한 기능을 구분하여 처리합니다.
+```java
+// in ChatServer.java > ClientHandler.run()
+while ((message = in.readLine()) != null) {
+    if (message.startsWith("GET_USER_INFO")) {
+        // 유저 정보 조회 로직
+    } else if (message.startsWith("PRIVCHAT")) {
+        // 1:1 채팅 처리 로직
+    } else if (message.startsWith("CRTROOM")) { 
+        // 게임방 생성 로직
+    } else if (message.startsWith("ENTROOM")) {
+        // 게임방 입장 로직
+    } else if (message.startsWith("GAME:")) {
+        // 게임 관련(돌 두기, 기권) 처리 로직
+    } else {
+        // 전체 채팅 처리 로직
+    }
+}
+```
+
+#### 4.주소 검색 API 연동 (`MapApi.java`)
+
+```java
+// 우체국 도로명주소 API를 호출하여 주소를 검색하는 기능입니다.
+// HTTP 요청으로 XML 응답을 받아 파싱합니다.
+public static String find(String s, int p, int l, List<String> v, int[] n) {
+    HttpURLConnection con = null;
+    try {
+        URL url = new URL(
+        "http://openapi.epost.go.kr/postal/retrieveNewAdressAreaCdSearchAllService/..."
+        + "?ServiceKey=서비스키"
+        + "&countPerPage=" + l
+        + "&currentPage=" + p
+        + "&srchwrd=" + URLEncoder.encode(s,"UTF-8") // 검색어
+        );
+
+        con = (HttpURLConnection) url.openConnection();
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(con.getInputStream());
+
+        // ... XML 응답에서 에러 및 성공 여부 처리 ...
+
+        if (bOk) { // 응답이 성공적일 경우
+            NodeList ns = doc.getElementsByTagName("newAddressListAreaCdSearchAll");
+            for (p = 0; p < ns.getLength(); p++) {
+                for (nd = ns.item(p).getFirstChild(); nd != null; nd = nd.getNextSibling()) {
+                    // "zipNo"(우편번호), "lnmAdres"(도로명주소) 등의 정보를
+                    // 파싱하여 결과 리스트 'v'에 추가합니다.
+                    v.add(nd.getTextContent());
+                }
+            }
+        }
+        // ...
+    } catch (Exception e) {
+        s = e.getMessage();
+    }
+    // ...
+    return s;
+}
+```
+
+#### 5. SMTP를 이용한 이메일 전송 (`NaverMailSender.java`)
+
+```java
+// Naver SMTP 서버와 javax.mail API를 사용하여 이메일을 전송하는 기능입니다.
+// '비밀번호 찾기' 기능에 사용됩니다.
+public void sendMail(String to, String subject, String body) throws MessagingException {
+    // 1. SMTP 서버 정보(호스트, 포트, 인증 등)를 Properties에 설정
+    Properties properties = new Properties();
+    properties.put("mail.smtp.host", "smtp.naver.com");
+    properties.put("mail.smtp.port", 465);
+    properties.put("mail.smtp.auth", "true");
+    properties.put("mail.smtp.ssl.enable", "true");
+    properties.put("mail.smtp.ssl.trust", "smtp.naver.com");
+
+    // 2. 이메일 계정 정보로 인증 세션 생성
+    Session session = Session.getInstance(properties, new Authenticator() {
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(username, password); // 네이버 아이디, 앱 비밀번호
+        }
+    });
+
+    // 3. 이메일 메시지(수신자, 제목, 본문) 생성
+    Message message = new MimeMessage(session);
+    message.setFrom(new InternetAddress(username));
+    message.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
+    message.setSubject(subject);
+    message.setText(body);
+
+    // 4. 이메일 전송
+    Transport.send(message);
+}
+```
+---
 
 ## 프로젝트 성과 및 배운 점
 
-### 기술적 성장
-- **소켓 통신에 대한 깊은 이해**: TCP/IP 기반의 소켓 프로그래밍을 통해 저수준(Low-level) 네트워크 통신 원리를 학습하고, 클라이언트-서버 아키텍처를 직접 설계하고 구현하는 경험을 쌓았습니다.
-- **OOP 설계 능력 향상**: 역할과 책임에 따라 클래스를 분리(e.g., `Client`, `Server`, `Room`, `DBManager`)하고, 인터페이스를 활용하여 각 기능의 결합도를 낮추는 등 객체 지향 설계 원칙을 적용하려 노력했습니다.
-- **DB 설계 및 관리**: ERD 설계를 통해 데이터의 정규화와 무결성을 고려했으며, 삭제/백업 정책(`user_bin`, `chat_messages_bin`)을 통해 데이터 관리의 안정성을 높였습니다.
-- **GUI 프로그래밍**: Java Swing을 다루며 이벤트 리스너, 커스텀 컴포넌트(`CustomScrollBarUI`) 등 GUI 애플리케이션의 동작 원리를 이해할 수 있었습니다.
+#### 기술적 성장
+-   **네트워크 프로그래밍**: 순수 Java 소켓과 멀티 스레딩을 통해 C/S(클라이언트-서버) 아키텍처의 동작 원리를 깊이 이해하고, 실시간 데이터 통신 애플리케이션을 직접 구축하는 경험을 쌓았습니다.
+-   **고급 GUI 프로그래밍**: 단순한 Swing 컴포넌트 사용을 넘어, `paintComponent`를 오버라이드하여 오목판, 말풍선 등 핵심 UI를 직접 렌더링하며 GUI의 동작 원리를 파악하고, UI/UX에 대한 고민을 할 수 있었습니다.
+-   **데이터베이스 설계 및 관리**: 테이블 설계(ERD)부터 시작하여, Soft-delete를 위한 백업 테이블과 복원 로직을 구현하며 데이터 무결성과 안정적인 관리 방안을 학습했습니다.
+-   **전체 시스템 설계**: 인증, 로비, 게임방, 채팅, 관리자 기능 등 여러 도메인을 아우르는 풀스택 애플리케이션을 처음부터 끝까지 직접 설계하고 구현하며 소프트웨어의 전체적인 흐름을 보는 시야를 넓혔습니다.
 
-### 문제 해결 경험
-- **동시성 문제 해결**: 여러 클라이언트가 동시에 서버에 접속하고 요청을 보낼 때 발생할 수 있는 동시성(Concurrency) 문제를 해결하기 위해 `synchronized` 키워드를 사용하여 스레드 안전성(Thread-safe)을 확보했습니다.
-- **프로토콜 설계**: 클라이언트와 서버 간의 원활한 통신을 위해 메시지 타입을 정의하고(e.g., `LOGIN|userID`, `CHAT|message`), 이를 파싱하여 처리하는 자체 프로토콜을 설계했습니다. 이를 통해 다양한 요청을 체계적으로 관리할 수 있었습니다.
-- **관전자-플레이어 전환 로직**: 게임 진행 중 플레이어가 퇴장했을 때, 관전자 중 가장 먼저 입장한 사용자를 새로운 플레이어로 승격시키는 로직을 구현하며 복잡한 상태 변화를 관리하는 능력을 길렀습니다.
+#### 문제 해결 경험
+-   **동시성 문제**: 여러 클라이언트가 동시에 게임방에 입장하거나 퇴장할 때 발생할 수 있는 데이터 불일치 문제를 해결하기 위해, 공유 자원(게임방 목록, 플레이어 목록)에 접근하는 코드 블록을 `synchronized`로 감싸 스레드 안전성(Thread-safe)을 확보했습니다.
+-   **복잡한 상태 관리**: 게임 중 플레이어가 퇴장하면 관전자가 플레이어로 자동 승격되는 로직, 모든 플레이어가 준비를 마쳐야 게임이 시작되는 상태(State)를 관리하며 복잡한 비즈니스 로직을 안정적으로 구현하는 방법을 익혔습니다.
+-   **프로토콜의 중요성**: 프로젝트 초기, 체계적이지 않은 메시지 형식으로 인해 디버깅에 어려움을 겪었습니다. 이를 해결하기 위해 명확한 구분자(`:`, `/`, `,`)를 사용하는 자체 프로토콜을 정의했고, 이를 통해 기능 확장이 용이하고 안정적인 통신 시스템을 구축할 수 있었습니다.
 
 ## 프로젝트 회고
 
-이번 프로젝트는 Java의 기본적인 문법을 넘어 네트워크, 데이터베이스, GUI 등 애플리케이션 개발에 필요한 여러 기술을 종합적으로 활용해 볼 수 있었던 소중한 경험이었습니다. 특히 순수 Java 코드로 소켓 서버를 구축하며 컴퓨터 네트워크의 동작 원리를 몸소 체감할 수 있었던 점이 가장 큰 수확이었습니다.
+이 프로젝트는 Java라는 하나의 언어만으로 네트워크 통신, 데이터베이스 연동, 그래픽 UI까지 모든 것을 만들어 볼 수 있었던 귀중한 경험이었습니다. 특히 라이브러리나 프레임워크의 도움 없이 직접 멀티 스레딩 서버와 커스텀 Swing 컴포넌트를 구현하며 컴퓨터 공학의 기본 원리를 몸으로 체득할 수 있었던 점이 가장 큰 성과라고 생각합니다.
 
-물론 아쉬운 점도 남습니다. 현재 구조는 서버에 모든 로직이 집중되어 있어 사용자가 많아지면 성능 저하가 발생할 수 있습니다. 만약 프로젝트를 개선한다면, Spring Boot와 같은 프레임워크를 도입하여 보다 안정적이고 확장성 있는 서버를 구축하고, 웹 기반의 UI/UX를 제공하여 접근성을 높여보고 싶습니다. 또한, 비밀번호를 암호화하여 저장하는 등 보안적인 측면을 더 강화할 필요성을 느꼈습니다.
-
-이 프로젝트를 통해 얻은 지식과 경험을 바탕으로, 앞으로 더 견고하고 사용자 친화적인 소프트웨어를 만드는 개발자로 성장해 나가고 싶습니다.
+`ClientCache`에서 클라이언트가 직접 DB에 접근하는 등 일부 아쉬운 설계도 존재하지만, 이러한 부분을 발견하고 개선점을 고민하는 과정 자체도 좋은 학습이 되었습니다. 만약 프로젝트를 개선한다면, 서버의 부하 분산을 위해 Netty와 같은 비동기 이벤트 기반 프레임워크를 도입하고, 모든 데이터 요청을 서버를 통해서만 이루어지도록 리팩토링하여 더욱 안정적이고 확장성 있는 구조로 발전시켜보고 싶습니다.
