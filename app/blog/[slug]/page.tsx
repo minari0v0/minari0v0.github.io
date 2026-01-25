@@ -14,7 +14,7 @@ import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
 
 const prettyCodeOptions = {
-  theme: "one-dark-pro",
+  theme: "github-dark",
   keepBackground: false,
   defaultLang: "plaintext",
 }

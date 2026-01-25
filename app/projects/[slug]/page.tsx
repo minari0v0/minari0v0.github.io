@@ -14,7 +14,7 @@ import { ProjectNavigation } from "@/components/project-navigation"
 import { Comments } from "@/components/comments"
 
 const prettyCodeOptions = {
-  theme: "one-dark-pro",
+  theme: "github-dark",
   keepBackground: false,
 }
 

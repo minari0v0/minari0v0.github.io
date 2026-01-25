@@ -19,7 +19,7 @@ export default function TableOfContents() {
   const [activeId, setActiveId] = useState("")
   const [isVisible, setIsVisible] = useState(false)
 
-  // 1. 목차 리스트 생성
+  // 1. 목차 리스트 생성 (h4는 제외하고 h1~h3만 수집)
   useEffect(() => {
     const elements = Array.from(document.querySelectorAll(".prose h1, .prose h2, .prose h3"))
     const headingData = elements.map((elem) => ({
@@ -37,10 +37,8 @@ export default function TableOfContents() {
       const contentElement = document.querySelector(".prose")
       if (contentElement) {
         const rect = contentElement.getBoundingClientRect()
-        // 본문 읽기 시작하면 등장 (화면 60% 지점 통과 시)
-        const triggerPoint = window.innerHeight * 0.6
-        
-        if (rect.top <= triggerPoint) {
+        // 본문을 읽기 시작하면 등장
+        if (rect.top <= window.innerHeight * 0.6) {
           setIsVisible(true)
         } else {
           setIsVisible(false)
@@ -49,31 +47,31 @@ export default function TableOfContents() {
         setIsVisible(true)
       }
 
-      // --- B. 활성 헤더(Active ID) 추적 로직 (화면 35% 지점 기준) ---
+      // --- B. 활성 헤더(Active ID) 추적 로직 (스택 쌓기 방식) ---
+      // h4를 포함하지 않으므로, h4 내용을 읽고 있어도 여전히 상위 h2/h3가 활성화됨
       const elements = Array.from(document.querySelectorAll(".prose h1, .prose h2, .prose h3"))
       
-      // [수정] 화면 중앙(0.5)보다 약간 위쪽인 35%(0.35) 지점을 기준선으로 설정
-      // 사람이 보통 글을 읽을 때 시선을 두는 높이입니다.
-      const targetLine = window.innerHeight * 0.35
+      // [수정] 헤더 인식 기준선 (화면 상단에서 100px 아래)
+      // 이 선을 지나간 헤더들 중 "가장 마지막" 녀석을 현재 챕터로 간주함
+      const targetLine = 100 
       
-      let closestId = ""
-      let minDistance = Infinity
+      let currentActiveId = ""
 
-      elements.forEach((elem) => {
+      for (const elem of elements) {
         const rect = elem.getBoundingClientRect()
-        const elemTop = rect.top
         
-        // 기준선(35%)과 헤더 위치 사이의 거리 계산
-        const distance = Math.abs(elemTop - targetLine)
-
-        if (distance < minDistance) {
-          minDistance = distance
-          closestId = elem.id
+        // 헤더가 기준선보다 위에 있다? (= 이미 읽고 지나갔거나 읽는 중이다)
+        if (rect.top < targetLine) {
+          currentActiveId = elem.id
+        } else {
+          // 헤더가 기준선보다 아래에 있다? (= 아직 안 읽은 미래의 챕터)
+          // 순서대로 탐색하므로, 미래의 챕터를 만나는 순간 반복 종료
+          break 
         }
-      })
+      }
 
-      if (closestId) {
-        setActiveId(closestId)
+      if (currentActiveId) {
+        setActiveId(currentActiveId)
       }
     }
 
@@ -87,7 +85,7 @@ export default function TableOfContents() {
     e.preventDefault()
     const element = document.getElementById(id)
     if (element) {
-      // 클릭해서 이동할 때도 시선 높이(100px 위) 고려
+      // 클릭 시 이동 위치 보정
       const y = element.getBoundingClientRect().top + window.scrollY - 100
       window.scrollTo({ top: y, behavior: "smooth" })
       setActiveId(id)
