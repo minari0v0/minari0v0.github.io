@@ -75,7 +75,13 @@ export function getProjectBySlug(slug: string) {
   const fileContents = fs.readFileSync(fullPath, "utf8")
   const { data, content } = matter(fileContents)
 
-  return { slug, frontmatter: data, content }
+  const contentForMdx = content
+    .replace(/<br>/g, "<br />")       // <br> -> <br />
+    .replace(/<img([^>]+)>/g, "<img$1 />") // <img> -> <img />
+    .replace(/<hr>/g, "<hr />");      // <hr> -> <hr />
+
+  // content 대신 변환된 contentForMdx를 반환
+  return { slug, frontmatter: data, content: contentForMdx }
 }
 
 // ---------------------------------------------------------
