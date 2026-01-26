@@ -19,7 +19,7 @@ export default function TableOfContents() {
   const [activeId, setActiveId] = useState("")
   const [isVisible, setIsVisible] = useState(false)
 
-  // 1. 목차 리스트 생성 (h4는 제외하고 h1~h3만 수집)
+  // 1. 목차 리스트 생성
   useEffect(() => {
     const elements = Array.from(document.querySelectorAll(".prose h1, .prose h2, .prose h3"))
     const headingData = elements.map((elem) => ({
@@ -30,14 +30,12 @@ export default function TableOfContents() {
     setHeadings(headingData)
   }, [])
 
-  // 2. 스크롤 이벤트 (등장 로직 + 활성 헤더 추적)
+  // 2. 스크롤 이벤트
   useEffect(() => {
     const handleScroll = () => {
-      // --- A. TOC 등장/퇴장 로직 ---
       const contentElement = document.querySelector(".prose")
       if (contentElement) {
         const rect = contentElement.getBoundingClientRect()
-        // 본문을 읽기 시작하면 등장
         if (rect.top <= window.innerHeight * 0.6) {
           setIsVisible(true)
         } else {
@@ -47,25 +45,16 @@ export default function TableOfContents() {
         setIsVisible(true)
       }
 
-      // --- B. 활성 헤더(Active ID) 추적 로직 (스택 쌓기 방식) ---
-      // h4를 포함하지 않으므로, h4 내용을 읽고 있어도 여전히 상위 h2/h3가 활성화됨
       const elements = Array.from(document.querySelectorAll(".prose h1, .prose h2, .prose h3"))
-      
-      // [수정] 헤더 인식 기준선 (화면 상단에서 100px 아래)
-      // 이 선을 지나간 헤더들 중 "가장 마지막" 녀석을 현재 챕터로 간주함
       const targetLine = 100 
       
       let currentActiveId = ""
 
       for (const elem of elements) {
         const rect = elem.getBoundingClientRect()
-        
-        // 헤더가 기준선보다 위에 있다? (= 이미 읽고 지나갔거나 읽는 중이다)
         if (rect.top < targetLine) {
           currentActiveId = elem.id
         } else {
-          // 헤더가 기준선보다 아래에 있다? (= 아직 안 읽은 미래의 챕터)
-          // 순서대로 탐색하므로, 미래의 챕터를 만나는 순간 반복 종료
           break 
         }
       }
@@ -85,7 +74,6 @@ export default function TableOfContents() {
     e.preventDefault()
     const element = document.getElementById(id)
     if (element) {
-      // 클릭 시 이동 위치 보정
       const y = element.getBoundingClientRect().top + window.scrollY - 100
       window.scrollTo({ top: y, behavior: "smooth" })
       setActiveId(id)
@@ -101,23 +89,34 @@ export default function TableOfContents() {
         ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}
       `}
     >
-      <ul className={`space-y-3 text-[16.5px] ${paperlogyBold.className}`}>
+      <ul className={`space-y-2 ${paperlogyBold.className}`}>
         {headings.map((heading) => (
           <li
             key={heading.id}
-            style={{ 
-              paddingLeft: heading.level === 3 ? "1rem" : "0",
-            }}
+            className={`
+              ${heading.level === 1 ? "mt-4 mb-2" : "mt-1"}
+            `}
           >
             <a
               href={`#${heading.id}`}
               onClick={(e) => handleClick(e, heading.id)}
               className={`
-                block
-                transition-all duration-300 ease-in-out cursor-pointer
+                block transition-all duration-300 ease-in-out cursor-pointer line-clamp-1
+                
+                /* 레벨별 들여쓰기 */
+                ${heading.level === 1 ? "pl-0" : ""}
+                ${heading.level === 2 ? "pl-3" : ""}
+                ${heading.level === 3 ? "pl-6 border-l-2 border-gray-100" : ""} 
+
+                /* 레벨별 글자 크기 */
+                ${heading.level === 1 ? "text-[16px]" : ""}
+                ${heading.level === 2 ? "text-[14.5px] opacity-90" : ""}
+                ${heading.level === 3 ? "text-[13.5px] opacity-80" : ""}
+
+                /* [수정됨] 느낌표(!)를 붙여서 호버 색상을 강제 적용 */
                 ${activeId === heading.id
-                  ? "text-[#748E63] scale-105 origin-left font-medium" 
-                  : "text-gray-300 hover:text-gray-500 scale-100" 
+                  ? "text-[#748E63] scale-105 origin-left opacity-100 font-medium" 
+                  : "text-gray-300 hover:!text-[#97A87A] scale-100" // <--- 여기 ! 추가
                 }
               `}
             >
