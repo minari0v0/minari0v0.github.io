@@ -19,23 +19,6 @@ github: https://github.com/minari0v0/java_omok
 단순한 게임 구현을 넘어, 실시간 채팅, 랭킹 시스템, 외부 API 연동, 관리자용 대시보드 등 실제 서비스에 필요한 다양한 기능을 포함하여 백엔드부터 프론트엔드, 데이터베이스까지 아우르는 종합적인 개발 경험을 목표로 했습니다.
 
 
-## 핵심 기능
-
--   **실시간 멀티플레이어 게임**: TCP/IP 소켓 통신 기반의 서버를 통해 여러 사용자가 동시에 접속하여 다른 유저와 오목을 두거나 관전할 수 있습니다.
--   **동적 게임방 시스템**: 난수 코드를 이용한 방 생성, 비밀번호를 설정한 비공개 방 생성, 관전자 허용 여부 등 다양한 옵션을 제공합니다.
--   **풍부한 채팅 경험**:
-    -   **커스텀 UI**: 채팅 메시지를 말풍선 형태로 그려주는 `ChatBubblePanel`을 직접 구현하여 가독성을 높였습니다.
-    -   **다양한 채팅**: 로비 전체 채팅, 게임방 채팅, 1:1 개인 채팅을 지원하며, 이모티콘과 채팅창 테마 변경 기능도 제공합니다.
-    -   **부가 기능**: 1:1 채팅방 내에서 특정 키워드로 대화 내용을 검색하는 기능을 구현했습니다.
--   **커뮤니티 및 편의 기능**:
-    -   **랭킹 시스템**: DB와 연동하여 승률 기반의 랭킹을 산정하고, `CustomPanel`을 활용해 금/은/동메달 배경을 동적으로 렌더링하는 팝업을 제공합니다.
-    -   **날씨 위젯**: 공공 데이터 포털의 날씨 API를 HTTP로 호출하여 사용자가 위치한 동네의 날씨 정보를 로그인 화면과 로비에 표시합니다.
-    -   **사용자 프로필**: 회원가입 시 `thumbnailator` 라이브러리와 직접 구현한 `CropImageWindow`를 통해 프로필 이미지를 편집/저장하고, 이 이미지가 오목돌로 사용됩니다.
--   **관리자 대시보드 (`ChatServerGUI`)**:
-    -   **통합 관리**: 서버 로그 실시간 모니터링, 전체 회원 정보 조회/수정/삭제/복원(Soft-delete), 접속 중인 유저 강제 추방 등 서버 및 사용자 관리를 위한 GUI 툴을 제공합니다.
-    -   **데이터 관리**: 관리자가 특정 유저의 채팅 기록을 조회하고, 부적절한 메시지를 삭제(백업 테이블로 이동)하거나 복원할 수 있습니다.
-
----
 
 ## 프로젝트 구조
 ```
@@ -57,31 +40,61 @@ github: https://github.com/minari0v0/java_omok
 
 ## 기술 스택 및 아키텍처
 
-#### 1. 백엔드 (Backend)
+#### 백엔드
+- **Java 8+**: 메인 개발 언어
+- **Socket Programming (TCP/IP)**: 멀티 스레드 기반의 실시간 클라이언트-서버 통신
+- **MySQL 8.0 & JDBC**: 사용자 정보, 게임 전적, 채팅 로그 등 데이터 관리
+- **Java Serialization**: 객체 직렬화를 통한 데이터 전송
+- **JavaMail API**: SMTP를 이용한 이메일 전송 (비밀번호 찾기 기능)
 
--   **`Java Socket (TCP/IP)`**: 서버의 핵심 통신 기술로, 클라이언트의 연결 요청을 받고 데이터를 주고받는 역할을 합니다.
--   **`Multi-threaded Server`**: `ChatServer`가 클라이언트 접속 시마다 `ClientHandler` 스레드를 생성하는 **1-Client-1-Thread** 모델을 적용했습니다. 이를 통해 여러 클라이언트의 동시 요청을 안정적으로 처리할 수 있습니다.
--   **`Custom Protocol`**: "CRTROOM", "PRIVCHAT", "GAME:MOVE" 등과 같이 `|` 또는 공백으로 구분된 문자열 기반의 자체 프로토콜을 설계하여 클라이언트와 서버 간의 다양한 요청과 응답을 체계적으로 관리했습니다.
+#### 프론트엔드
+- **Java Swing**: 데스크톱 애플리케이션 GUI 구축
+- **Custom UI Components**: `paintComponent`를 오버라이드한 커스텀 오목판, 말풍선, 스크롤바 등
 
-#### 2. 프론트엔드 (Frontend)
+#### External APIs & Libraries
+- **기상청 공공데이터포털**: HTTP 통신으로 실시간 날씨 정보 조회
+- **우체국 도로명주소 API**: 주소 검색 기능
+- **Thumbnailator**: 프로필 이미지 편집 및 리사이징
 
--   **`Java Swing`**: 모든 사용자 인터페이스를 Swing으로 구축했습니다. `JFrame`, `JPanel`, `JTable` 등 기본 컴포넌트뿐만 아니라, `paintComponent` 메소드를 오버라이드하여 UI를 직접 렌더링하는 다수의 커스텀 컴포넌트를 구현했습니다.
-    -   **`BoardLabel`**: 오목판의 격자와 격자점, 사용자의 프로필 이미지를 이용한 오목돌, 마우스 오버 시 미리보기 등을 직접 그려주는 핵심 게임 UI 컴포넌트입니다.
-    -   **`ChatBubblePanel`**: 메시지 길이와 이모티콘 유무에 따라 동적으로 크기가 변하는 말풍선 UI를 구현했습니다.
-    -   **`CustomScrollBarUI`**: 채팅창의 스크롤바 디자인을 커스터마이징하여 미적 완성도를 높였습니다.
-    -   **`FontLoader`**: `.ttf` 폰트 파일을 동적으로 로드하여 사용자 PC에 폰트가 설치되지 않아도 일관된 디자인을 제공하도록 했습니다.
+#### Development Tools
+- **Eclipse IDE**: 통합 개발 환경
+- **MySQL Workbench**: 데이터베이스 모델링 및 관리
 
-#### 3. 데이터베이스 (Database) & Persistence
+## DB 설계
+#### 주요 테이블
+```sql
+-- 사용자 정보 (userinfo)
+users (id, nickname, password, profile_img_path, win, lose)
 
--   **`MySQL` & `JDBC`**: 사용자 정보, 게임 전적, 채팅 로그 등 모든 데이터를 MySQL에 저장하고, JDBC API를 통해 Java 애플리케이션과 연동했습니다.
--   **`DAO (Data Access Object) Pattern`**: DB 연결을 담당하는 `DBmanager`, 유저 정보 관련 SQL을 모아둔 `UserInfoDb`, 채팅 메시지 관련 SQL을 모아둔 `MessageDbManager`로 역할을 분리하여 데이터 접근 로직을 캡슐화하고 코드의 유지보수성을 향상시켰습니다.
--   **`Soft-delete`**: 관리자가 사용자나 채팅 메시지를 삭제할 때, 실제 DB에서 제거하는 대신 `_bin` 접미사가 붙은 백업 테이블로 데이터를 옮기도록 설계했습니다. 이를 통해 데이터의 실수 없는 관리와 복원 기능을 구현했습니다.
+-- 채팅 로그 (messages)
+messages (id, from_user, to_user, message, timestamp, room_name)
 
-#### 4. 외부 API 및 라이브러리
+-- 삭제된 사용자 (userinfo_bin)
+userinfo_bin (id, nickname, password, profile_img_path, win, lose)
 
--   **`Public Data Portal API`**: 기상청의 초단기예보 API를 HTTP로 호출하여 날씨 정보를 가져왔습니다.
--   **`NaverMail API (javax.mail)`**: 비밀번호 찾기 기능 구현을 위해 Naver의 SMTP 서버를 통해 사용자에게 이메일을 발송하는 `NaverMailSender`를 구현했습니다.
--   **`Thumbnailator`**: 프로필 이미지 업로드 시, 사용자가 원하는 영역을 정사각형으로 자르고 리사이징하는 데 사용된 이미지 처리 라이브러리입니다.
+-- 삭제된 채팅 (messages_bin)
+messages_bin (id, from_user, to_user, message, timestamp, room_name)
+```
+
+---
+
+
+## 핵심 기능
+
+-   **실시간 멀티플레이어 게임**: TCP/IP 소켓 통신 기반의 서버를 통해 여러 사용자가 동시에 접속하여 다른 유저와 오목을 두거나 관전할 수 있습니다.
+-   **동적 게임방 시스템**: 난수 코드를 이용한 방 생성, 비밀번호를 설정한 비공개 방 생성, 관전자 허용 여부 등 다양한 옵션을 제공합니다.
+-   **풍부한 채팅 경험**:
+    -   **커스텀 UI**: 채팅 메시지를 말풍선 형태로 그려주는 `ChatBubblePanel`을 직접 구현하여 가독성을 높였습니다.
+    -   **다양한 채팅**: 로비 전체 채팅, 게임방 채팅, 1:1 개인 채팅을 지원하며, 이모티콘과 채팅창 테마 변경 기능도 제공합니다.
+    -   **부가 기능**: 1:1 채팅방 내에서 특정 키워드로 대화 내용을 검색하는 기능을 구현했습니다.
+-   **커뮤니티 및 편의 기능**:
+    -   **랭킹 시스템**: DB와 연동하여 승률 기반의 랭킹을 산정하고, `CustomPanel`을 활용해 금/은/동메달 배경을 동적으로 렌더링하는 팝업을 제공합니다.
+    -   **날씨 위젯**: 공공 데이터 포털의 날씨 API를 HTTP로 호출하여 사용자가 위치한 동네의 날씨 정보를 로그인 화면과 로비에 표시합니다.
+    -   **사용자 프로필**: 회원가입 시 `thumbnailator` 라이브러리와 직접 구현한 `CropImageWindow`를 통해 프로필 이미지를 편집/저장할 수 있습니다.
+-   **관리자 대시보드 (`ChatServerGUI`)**:
+    -   **통합 관리**: 서버 로그 실시간 모니터링, 전체 회원 정보 조회/수정/삭제/복원(Soft-delete), 접속 중인 유저 강제 추방 등 서버 및 사용자 관리를 위한 GUI 툴을 제공합니다.
+    -   **데이터 관리**: 관리자가 특정 유저의 채팅 기록을 조회하고, 부적절한 메시지를 삭제(백업 테이블로 이동)하거나 복원할 수 있습니다.
+
 
 ---
 
@@ -155,28 +168,7 @@ private boolean checkDirection(int x, int y, int dx, int dy, int stone) {
 }
 ```
 
-#### 3. 커스텀 프로토콜 처리 (`ClientHandler.java`)
-클라이언트로부터 받은 문자열 메시지를 `startsWith` 메소드로 파싱하여, 약속된 동작을 수행하는 부분입니다. 이를 통해 채팅, 유저 정보 요청, 게임방 관리 등 다양한 기능을 구분하여 처리합니다.
-```java
-// in ChatServer.java > ClientHandler.run()
-while ((message = in.readLine()) != null) {
-    if (message.startsWith("GET_USER_INFO")) {
-        // 유저 정보 조회 로직
-    } else if (message.startsWith("PRIVCHAT")) {
-        // 1:1 채팅 처리 로직
-    } else if (message.startsWith("CRTROOM")) { 
-        // 게임방 생성 로직
-    } else if (message.startsWith("ENTROOM")) {
-        // 게임방 입장 로직
-    } else if (message.startsWith("GAME:")) {
-        // 게임 관련(돌 두기, 기권) 처리 로직
-    } else {
-        // 전체 채팅 처리 로직
-    }
-}
-```
-
-#### 4.주소 검색 API 연동 (`MapApi.java`)
+#### 3.주소 검색 API 연동 (`MapApi.java`)
 
 ```java
 // 우체국 도로명주소 API를 호출하여 주소를 검색하는 기능입니다.
@@ -216,7 +208,7 @@ public static String find(String s, int p, int l, List<String> v, int[] n) {
 }
 ```
 
-#### 5. SMTP를 이용한 이메일 전송 (`NaverMailSender.java`)
+#### 4. SMTP를 이용한 이메일 전송 (`NaverMailSender.java`)
 
 ```java
 // Naver SMTP 서버와 javax.mail API를 사용하여 이메일을 전송하는 기능입니다.

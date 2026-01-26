@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
+import LoadingLink from "@/components/loading-link"
 import Image from "next/image"
 import { CategoryFilter } from "@/components/category-filter"
 
@@ -39,7 +39,7 @@ export function BlogList({ posts, categories, counts }: BlogListProps) {
       {/* [복구] 기존 그리드 간격 유지 */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredPosts.map((post) => (
-          <Link key={post.slug} href={`/blog/${post.slug}`} className="group block h-full">
+          <LoadingLink key={post.slug} href={`/blog/${post.slug}`} className="group block h-full">
             {/* [복구] '카드 UI' 스타일 (하얀 박스 + 테두리 + 그림자) 완벽 복원 */}
             <article className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 h-full flex flex-col">
               
@@ -86,7 +86,7 @@ export function BlogList({ posts, categories, counts }: BlogListProps) {
                 </div>
               </div>
             </article>
-          </Link>
+          </LoadingLink>
         ))}
       </div>
     </>

@@ -22,7 +22,7 @@ export function Navbar() {
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md z-50">
       <nav className="max-w-[1100px] mx-auto flex h-16 items-center justify-between px-6">
         
         {/* [왼쪽 그룹] 로고 + 네비게이션 */}

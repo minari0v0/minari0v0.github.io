@@ -1,4 +1,4 @@
-import Link from "next/link"
+import LoadingLink from "@/components/loading-link"
 import Image from "next/image"
 import { Clock, Calendar } from "lucide-react"
 import { calculateDuration, formatMonth } from "@/lib/date-utils" // [수정] formatMonth 추가 임포트
@@ -35,7 +35,7 @@ export function ProjectCard({
   const endDateStr = endDate ? formatMonth(endDate) : "진행 중"
 
   return (
-    <Link
+    <LoadingLink
       href={href}
       className="group flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
     >
@@ -111,6 +111,6 @@ export function ProjectCard({
           </div>
         )}
       </div>
-    </Link>
+    </LoadingLink>
   )
 }
