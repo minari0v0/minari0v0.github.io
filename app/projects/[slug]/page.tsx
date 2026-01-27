@@ -12,6 +12,7 @@ import { ProjectInfo } from "@/components/project-info"
 import { GithubButton } from "@/components/ui/github-button"
 import { ProjectNavigation } from "@/components/project-navigation"
 import { Comments } from "@/components/comments"
+import Mermaid from "@/components/mermaid"
 
 const prettyCodeOptions = {
   theme: "github-dark",
@@ -119,7 +120,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
           <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-img:rounded-xl">
             <MDXRemote 
-               source={content} 
+               source={content}
+               components={{ Mermaid }} 
                options={{
                  mdxOptions: {
                    remarkPlugins: [remarkGfm],
