@@ -33,25 +33,13 @@ github: https://github.com/minari0v0/java_omok
 
 ## 기술 스택 및 아키텍처
 
-#### 백엔드
-- **Java 8+**: 메인 개발 언어
-- **Socket Programming (TCP/IP)**: 멀티 스레드 기반의 실시간 클라이언트-서버 통신
-- **MySQL 8.0 & JDBC**: 사용자 정보, 게임 전적, 채팅 로그 등 데이터 관리
-- **Java Serialization**: 객체 직렬화를 통한 데이터 전송
-- **JavaMail API**: SMTP를 이용한 이메일 전송 (비밀번호 찾기 기능)
-
-#### 프론트엔드
-- **Java Swing**: 데스크톱 애플리케이션 GUI 구축
-- **Custom UI Components**: `paintComponent`를 오버라이드한 커스텀 오목판, 말풍선, 스크롤바 등
-
-#### 외부 APIs & Libraries
-- **기상청 공공데이터포털**: HTTP 통신으로 실시간 날씨 정보 조회
-- **우체국 도로명주소 API**: 주소 검색 기능
-- **Thumbnailator**: 프로필 이미지 편집 및 리사이징
-
-#### Dev Tools
-- **Eclipse IDE**: 통합 개발 환경
-- **MySQL Workbench**: 데이터베이스 모델링 및 관리
+| 분류 | 기술 |
+|:--------:|:-----:|
+| **Frontend** | Java Swing, Custom UI Components |
+| **Backend** | Java 8+, Socket (TCP/IP), JavaMail API |
+| **Database** | MySQL 8.0, JDBC |
+| **APIs / Libs** | Weather/Address API, Thumbnailator, Serialization |
+| **Tools** | Eclipse IDE, MySQL Workbench |
 
 ## DB 설계
 #### 주요 테이블

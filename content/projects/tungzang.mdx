@@ -11,10 +11,15 @@ github: https://github.com/minari0v0/tungzang
 
 ## 프로젝트 개요
 
-'텅장수강러'는 대학생들의 수강신청과 학교생활을 돕기 위해 개발된 풀스택 웹 애플리케이션으로, <br>
-이 프로젝트는 강의 평가, 개인 시간표 관리, 학생 커뮤니티, 캠퍼스 생활 정보(날씨, 학식, 학사 일정) 등 대학생에게 필수적인 다양한 기능을 제공합니다.
+> **"이번 학기 시간표, 또 망하셨나요?"**
+> 수강신청 '광클' 실패로 인한 절망, 오늘 학식 메뉴에 대한 고민, 흩어진 학사 정보들...
+
+<span className="bg-clip-text text-transparent bg-gradient-to-r from-[#8C4BAF] to-[#E7A9E0] font-extrabold text-xl">'텅장수강러'</span>는 대학생의 지갑(텅장)만큼이나 공허할 뻔한 대학 생활을 알차게 채우기 위해 시작된 프로젝트입니다. 단순히 시간표를 짜는 도구를 넘어, **대학생의 하루를 책임지는 올인원 캠퍼스 라이프 플랫폼**을 지향합니다.
+
+여기저기 흩어진 학교 정보를 찾아 헤매는 불편함을 없애기 위해, **강의 평가와 시간표 관리**부터 **실시간 학식 정보, 학사 일정**, 그리고 **익명 커뮤니티**까지 대학 생활에 필수적인 모든 기능을 하나의 직관적인 웹 애플리케이션에 담았습니다.
+
 ## 프로젝트 구조
-```
+```text
 .
 ├── pom.xml
 └── src
@@ -39,27 +44,14 @@ github: https://github.com/minari0v0/tungzang
 
 ## 기술 스택 및 아키텍처
 
-#### 백엔드
-- Java 8
-- Servlet / JSP
-- MySQL 8.0
-- Maven
-
-#### 프론트엔드
-- HTML / CSS / JavaScript
-- Bootstrap 5
-- jQuery
-- Chart.js
-
-#### 기타
-- jbcrypt (비밀번호 암호화)
-- Gson / Jackson (JSON 처리)
-- Jsoup (웹 크롤링)
-
-#### Dev Tools
-- **IntelliJ IDEA**: 통합 개발 환경
-- **Apache Tomcat 9.0**: 서블릿 컨테이너 (웹 서버)
-- **MySQL Workbench**: 데이터베이스 모델링 및 관리
+| 분류 | 기술 |
+|:--------:|:-----:|
+| **Frontend** | HTML/CSS/JS, Bootstrap 5, jQuery, Chart.js |
+| **Backend** | Java 8, Servlet / JSP |
+| **Database** | MySQL 8.0 |
+| **Server** | Apache Tomcat 9.0 |
+| **Libraries** | jbcrypt, Gson, Jackson, Jsoup |
+| **Tools** | Maven, IntelliJ IDEA, MySQL Workbench |
 
 ## DB 설계
 
@@ -89,17 +81,6 @@ comments (id, post_id, author_id, content, likes, is_reported)
 -- 시간표 강의
 timetable_courses (id, user_id, name, professor, day, start_time, end_time, location, color)
 
--- 게시글 좋아요 (다대다 관계)
-post_likes (id, post_id, user_id)
-
--- 댓글 좋아요 (다대다 관계)
-comment_likes (id, comment_id, user_id)
-
--- 신고 내역
-reports (id, content_type, content_id, reporter_id, reason, status, admin_id, admin_action)
-
--- 사용자 등급 업데이트 프로시저
-PROCEDURE UpdateUserGrade(IN p_user_id INT)
 ```
 
 ## UI/UX 특징
@@ -300,4 +281,8 @@ END //
 
 ## 프로젝트 회고
 
-'텅장수강러' 프로젝트는 웹 개발의 각 계층을 깊이 있게 이해하고, 실제 사용자의 필요를 반영한 기능을 구현하며, 다양한 프론트엔드 상호작용과 백엔드 데이터 처리를 통합하는 귀중한 경험을 제공했습니다. 특히, 프레임워크에 의존하기보다 순수 Java와 웹 표준 기술 스택으로 직접 시스템을 구축하며 웹 개발의 근간 원리를 체득할 수 있었던 점이 가장 큰 성과라고 생각합니다. 이 프로젝트를 통해 얻은 경험과 지식은 향후 더 복잡하고 확장 가능한 웹 서비스를 개발하는 데 좋은 기반이 될 것입니다.
+'텅장수강러'는 웹 개발의 세계에 첫 발을 내딛으며, <b>"웹 애플리케이션은 어떻게 작동하는가?"</b>라는 근원적인 질문에 답을 찾아가는 과정이었습니다.
+
+Spring과 같은 편리한 프레임워크를 사용하기에 앞서, **순수 Java와 표준 웹 기술**만으로 MVC 패턴을 직접 설계하고 구현해 본 경험은 개발자로서 더할 나위 없이 소중한 자산이 되었습니다. 데이터의 흐름을 날것 그대로 제어하며 프론트엔드와 백엔드가 유기적으로 연결되는 과정을 직접 부딪쳐본 덕분에, **풀스택 개발의 매력과 필요성**을 몸소 체감할 수 있었습니다.
+
+이 프로젝트에서 쌓아 올린 '날 것의 경험'은 향후 Spring Boot와 같은 모던 프레임워크를 단순히 사용하는 것을 넘어, <b>"프레임워크가 내부적으로 어떤 문제를 해결해주고 있는지"</b>를 깊이 있게 이해하고 활용할 수 있는 단단한 기반이 될 것이라 확신합니다.
