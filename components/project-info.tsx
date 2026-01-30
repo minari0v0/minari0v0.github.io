@@ -8,8 +8,32 @@ interface ProjectInfoProps {
   type?: string 
 }
 
+// [설정] 기술 스택 카드에서 숨길 '개념적' 태그 목록
+// 이 태그들은 상단 헤더 뱃지에는 나오지만, 하단 상세 카드에서는 숨겨집니다.
+const EXCLUDED_TAGS = [
+  "Multi-threading", 
+  "Socket", 
+  "OOP", 
+  "TCP/IP",
+  // 추후 숨기고 싶은 태그가 있다면 여기에 추가하세요 (예: "Algorithm", "REST API")
+]
+
 export function ProjectInfo({ startDate, endDate, tags, type = "개인 프로젝트" }: ProjectInfoProps) {
-  const techStack = categorizeTags(tags)
+  // 1. 일단 전체 태그를 카테고리별로 분류
+  const fullTechStack = categorizeTags(tags)
+
+  // 2. 필터링 로직: 제외할 태그를 뺀 새로운 객체 생성
+  const techStack = Object.entries(fullTechStack).reduce((acc, [category, items]) => {
+    // 제외 목록에 없는 태그만 남기기
+    const filteredItems = items.filter((tag) => !EXCLUDED_TAGS.includes(tag))
+    
+    // 필터링 후에도 아이템이 남아있다면 결과에 추가 (비어버린 카테고리는 자동 삭제됨)
+    if (filteredItems.length > 0) {
+      acc[category] = filteredItems
+    }
+    return acc
+  }, {} as Record<string, string[]>)
+
 
   const formatDate = (d: string | Date) => {
     return new Date(d).toLocaleDateString("ko-KR", { 
@@ -71,25 +95,33 @@ export function ProjectInfo({ startDate, endDate, tags, type = "개인 프로젝
               기술 스택 (Tech Stack)
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-4">
-              {Object.entries(techStack).map(([category, items]) => (
-                <div key={category} className="flex flex-col gap-3">
-                  <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider border-l-[3px] border-gray-200 pl-2">
-                    {category}
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {items.map((item) => (
-                      <span 
-                        key={item} 
-                        className="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-gray-700 border border-gray-200 shadow-sm hover:border-[#7c9070] hover:text-[#7c9070] transition-colors cursor-default"
-                      >
-                        {item}
-                      </span>
-                    ))}
+            {/* 내용물이 있을 때만 렌더링 */}
+            {Object.keys(techStack).length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-4">
+                {Object.entries(techStack).map(([category, items]) => (
+                  <div key={category} className="flex flex-col gap-3">
+                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider border-l-[3px] border-gray-200 pl-2">
+                      {category}
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {items.map((item) => (
+                        <span 
+                          key={item} 
+                          className="inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium bg-white text-gray-700 border border-gray-200 shadow-sm hover:border-[#7c9070] hover:text-[#7c9070] transition-colors cursor-default"
+                        >
+                          {item}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              // 혹시 모든 태그가 필터링되어 기술 스택이 비어버린 경우 안내 메시지
+              <div className="flex items-center justify-center h-full text-gray-400 text-sm">
+                표시할 기술 스택 정보가 없습니다.
+              </div>
+            )}
         </div>
       </div>
     </div>

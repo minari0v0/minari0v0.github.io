@@ -1,25 +1,186 @@
 ---
 title: PassCheckers
-description: AI 이미지 분석 기반 수하물 분류 및 여행 도우미 애플리케이션
 startDate: "2025-03"
 endDate: "2025-12"
-thumbnail: /placeholder.svg
-tags: [Vue.js, Flask, YOLO, mySQL, pytorch]
-type: "팀 프로젝트" 
+description: AI 이미지 분석 기반 수하물 분류 및 여행 도우미 애플리케이션
+tags: ["Vue.js", "Flask", "YOLOv11", "MySQL", "Nginx", "PyTorch", "TensorRT", "Gemini"]
+thumbnail: "/images/projects/passcheckers/main.gif"
+type: "팀 프로젝트"
 github: https://github.com/minari0v0/PassCheckers
 ---
 
+import Mermaid from "@/components/mermaid"
+import AutoPlayVideo from "@/components/autoplay-video"
+
 ## 프로젝트 개요
-여행객들이 수하물을 챙길 때 기내 반입 가능 여부를 헷갈려하는 문제점을 해결하기 위해 개발했습니다. AI가 물품 사진을 분석하여 규정을 안내해 줍니다.
 
-## 주요 기능
-### 1. AI 수하물 분류
-- 사용자가 물품 사진을 업로드하면 AI 모델이 이를 분석
-- 기내 반입 가능/불가능/위탁 수하물 여부를 즉시 판별하여 안내
+> **"이거 기내 반입 되나요?"**
+> 공항 보안 검색대 앞에서 수하물을 다시 싸거나 버려야 했던 경험, 누구나 한 번쯤 있으실 겁니다.
 
-### 2. 여행 체크리스트
-- 여행지별 필수 준비물 추천 및 체크리스트 기능 제공
+포스트 코로나 시대 이후 여행 수요가 급증함에 따라, 2024년 하반기 기준 약 **146톤의 여객 포기 물품**이 발생했습니다. PassCheckers는 이러한 사회적 비용을 줄이기 위해 시작되었습니다.
 
-## 트러블 슈팅
-- **문제**: 모바일 환경에서 이미지 업로드 시 속도 저하 발생
-- **해결**: 이미지 리사이징 미들웨어를 적용하여 업로드 속도를 40% 개선
+사용자가 수하물 사진을 찍으면 **YOLOv11x 기반 AI**가 물품을 분석하고, 항공 보안법 및 여행지 규정에 맞춰 **기내/위탁 가능 여부를 자동으로 안내**해주는 통합 여행 지원 플랫폼입니다.
+
+## 프로젝트 구조
+
+```text
+PassCheckers/
+├── frontend/                       # Nuxt 3 프론트엔드
+│   ├── pages/                      # 서비스 페이지 (분류, 패킹, 무게 예측, 공유 등)
+│   ├── components/                 # UI 컴포넌트
+│   ├── composables/                # 전역 상태 및 API 로직
+│   └── assets/                     # 테마 및 스타일 시트
+├── backend/                        # Flask 백엔드 서버
+│   ├── models/                     # AI 모델 파일 (SKU, YOLOv11x)
+│   ├── routes/                     # RESTful API 엔드포인트
+│   ├── services/                   # 외부 API 연동 (Gemini, Weather, Amadeus)
+│   ├── matching/                   # 유사도 검증 및 데이터 매칭 로직
+│   └── db/                         # 데이터베이스 유틸리티
+└── logs/                           # 시스템 로그
+```
+
+## 기술 스택 및 아키텍처
+
+#### 기술 스택
+| 분류 | 기술 |
+|:--------:|:-----:|
+| **Frontend** | Nuxt 3, Vue 3, TypeScript, Quasar UI |
+| **Backend** | Python 3.10, Flask 3.1 |
+| **AI / Model** | YOLOv11x (커스텀 학습), PyTorch, TensorRT |
+| **Database** | MySQL 8.0, Redis |
+| **Infra** | Nginx |
+| **Others** | OpenCV, Numpy, Pillow, Gemini API |
+
+#### 시스템 아키텍처
+<Mermaid chart={`
+graph TB
+    A[사용자] --> B[Nuxt 3 프론트엔드]
+    B --> C[Flask 백엔드 API]
+    C --> D[YOLOv11 모델]
+    C --> E[SKU 모델]
+    C --> F[MySQL 데이터베이스]
+    C --> G[Redis 세션]
+    C --> H[날씨 API]
+    C --> I[Gemini AI]
+    
+    D --> J[객체 분류]
+    E --> K[바운딩 박스 탐지]
+    F --> L[사용자 데이터]
+    F --> M[물품 규정]
+    F --> N[여행지 정보]
+    G --> O[인증 토큰]
+    H --> P[실시간 예보]
+    I --> Q[패킹 추천]
+`} />
+
+## 담당 구현 영역
+
+#### 1. 지능형 수하물 분류 및 보정 에디터
+<AutoPlayVideo src="/videos/passcheckers/classification.mp4" />
+
+- SKU 및 YOLOv11x 이중 파이프라인을 통한 정밀 객체 탐지 및 분류
+- 탐지 결과 시각화 및 사용자 직접 바운딩 박스 수정/추가/삭제 기능
+- 유사도 검증 기반의 표준 물품명 추천 및 자동완성 시스템 (인메모리 캐싱 적용)
+- 분석 결과를 여행지별로 네이밍하여 고유 기록으로 저장 및 관리
+
+#### 2. 인터랙티브 수하물 패킹 가이드
+<AutoPlayVideo src="/videos/passcheckers/packing.mp4" />
+
+- 드래그 앤 드롭 인터페이스를 통한 기내/위탁 수하물 가상 패킹 시뮬레이션
+- 실시간 정책 엔진 기반의 반입 금지 물품 드롭 차단 및 경고 알림
+- 조건부 반입 물품에 대한 상세 가이드와 지연 호버 정보 팝업
+- 현재 패킹 현황을 상시 확인할 수 있는 플로팅 요약 윈도우
+
+#### 3. 하이브리드 수하물 무게 예측 및 시각화
+![무게측정](/images/projects/passcheckers/weight.png)
+
+- 객체 면적 비율과 표준 무게 데이터를 결합한 수치적 무게 추정 알고리즘
+- DB 미등록 물품 추가 시 Gemini API를 활용한 실시간 정보 보강
+- 카테고리별 무게 분포 시각화 및 적정 캐리어 사이즈 추천 서비스
+
+#### 4. 실시간 동반자 수하물 정보 공유
+![수하물공유](/images/projects/passcheckers/sharing.png)
+
+- 고유 공유 코드를 활용한 동반 여행자 간 분석 기록 세션 연결
+- 캐러셀 UI를 통한 동반자별 수하물 데이터 직관적 교차 조회
+- 참여자 간 실시간 채팅 기능을 통한 준비물 중복 방지 및 소통 지원
+- 호스트 권한 기반의 멤버 관리 및 연결 해제 기능
+
+## 협업 및 부가 기능
+![여행준비물추천](/images/projects/passcheckers/recommend.png)
+
+- **여행 성향 맞춤형 패킹 추천**
+  - 5가지 설문 데이터(목적지, 일정 등)와 날씨 API를 분석하여 개인화된 준비물 리스트 생성
+  - 추천된 리스트를 기존 수하물 분석 세션으로 연동하는 로직의 공동 계획 및 테스트 담당
+<br>
+
+![여행지정보](/images/projects/passcheckers/budget_info.png)
+
+- **세계 여행지 예산 및 물가 정보**
+  - 크롤링 기반의 전 세계 도시별 여행 경비 및 상세 물가(숙박, 교통, 식비 등) 정보 제공
+  - 지도 인터페이스를 통한 직관적인 지역 선택 및 여행 예산 등급별(저가/중가/고가) 데이터 시각화
+
+## 핵심 기술
+
+#### 1. 객체 탐지 성능 극대화를 위한 2-Stage 파이프라인
+수하물 이미지는 작은 물체들이 밀집된 특성이 있어 단일 탐지 모델로는 오탐율이 높습니다. 이를 해결하기 위해 **물체 위치 탐지에 특화된 SKU 모델**로 1차 스캔을 수행하고, 탐지된 영역만을 Crop하여 **YOLOv11x 모델**로 정밀 분류하는 2단계 구조를 설계했습니다. 이 과정에서 44개 클래스의 커스텀 데이터셋을 직접 구축하여 분류 성능을 확보했습니다.
+
+#### 2. TensorRT 가속화를 통한 하이브리드 추론 최적화
+무거운 YOLOv11x 모델을 실시간으로 운용하기 위해 모델 가속화를 진행했습니다. SKU 모델은 TensorRT 변환 후 **속도가 5.83배 향상**되었으나, YOLOv11x는 mAP가 **10.7% 하락**하는 손실이 발견되었습니다. 
+
+분석 신뢰도를 위해 **SKU(TensorRT)**와 **YOLO(PyTorch)**를 조합한 **하이브리드 전략**을 채택하여, 전체 속도를 **1.35배 개선**하면서도 정확도를 유지했습니다.
+
+#### 3. 통계와 AI를 결합한 하이브리드 무게 예측 (Safety Layer)
+단일 이미지 분석의 한계를 극복하기 위해 통계 데이터와 생성형 AI의 장점을 결합했습니다. 자체 구축한 표준 무게 DB를 우선적으로 적용하되, 이미지 내 객체 크기 비율을 반영하여 오차를 줄였습니다. 
+
+DB 미등록 물품의 경우 Gemini API가 예측하도록 설계했으나, 결과값이 비정상적인 범위를 벗어나지 않도록 **Min-Max 클리핑 로직**을 적용하여 데이터의 신뢰성을 확보했습니다.
+
+```python
+# backend/services/gemini_predict.py (무게 보정 로직)
+def _calculate_weight(avg_weight_value, weight_range, bbox_ratio):
+    # 1. 면적 비율에 따라 가중치 계수 산출 (0.75 ~ 1.2)
+    weight_multiplier = calculate_multiplier(bbox_ratio)
+    
+    # 2. Gemini 예측값에 가중치 적용
+    predicted_weight = base_avg_weight_g * weight_multiplier
+    
+    # 3. [Safety Layer] 정의된 Min-Max 범위 내로 클리핑하여 환각 방지
+    return max(min_weight_g, min(predicted_weight, max_weight_g))
+```
+
+#### 4. 공유 코드 기반의 실시간 협업 세션 관리
+서로 다른 사용자의 분석 결과를 하나의 세션으로 연결하기 위해 공유 코드 시스템을 구축했습니다. 고유 코드를 통한 관계 테이블 매핑으로 동반자의 짐 목록을 실시간으로 조회하고 조율할 수 있는 채널을 제공합니다.
+
+```python
+# backend/routes/share.py (동반자 연결 세션 조회)
+@share_bp.route("/api/share/connections/<share_code>", methods=["GET"])
+def get_all_connections(share_code):
+    # 1. 공유 코드로 현재 사용자의 세션 ID 식별
+    viewer_id = find_analysis_id_by_code(share_code)
+    # 2. 연결 테이블에서 호스트/파트너 관계를 추적하여 모든 참여자 ID 수집
+    participant_ids = collect_all_related_participants(viewer_id)
+    # 3. 참여자의 상세 분석 데이터 및 물품 리스트 통합 반환
+    return jsonify({"partners": fetch_detailed_partner_data(participant_ids)})
+```
+
+## 프로젝트 성과
+
+- **검색 속도 최적화**: 서버 구동 시 표준 물품 데이터를 메모리에 적재하여 추천 검색어 반환 속도 평균 **0.05초** 달성
+- **풀스택 AI 서비스 구축**: 모델 전처리부터 가속화, 웹 서비스 프론트/백엔드 전체 사이클 경험
+- **추론 성능 개선**: TensorRT 가속화 및 하이브리드 파이프라인 설계를 통해 정확도를 유지하면서 전체 추론 속도 약 **35%** 향상
+- **RESTful API 설계**: Flask를 활용한 30개 이상의 엔드포인트 모듈화 및 효율적인 통신 구조 설계
+- **인터랙티브 UI 구현**: Nuxt 3와 다양한 라이브러리를 활용한 복잡한 분석 데이터의 직관적 시각화
+
+## 개선할 부분
+
+현재 시스템은 정지 이미지 분석에 최적화되어 있으나, 이를 **실시간 영상 스트리밍 분석**으로 확장한다면 짐을 싸는 행위 자체를 실시간으로 가이드하는 서비스로 발전시킬 수 있습니다.
+
+또한, 이번 프로젝트에서는 TensorRT의 기본 변환(FP16)을 사용했으나, 향후 **양자화 인식 학습** 기법을 도입하여 모델을 재학습시킨다면, YOLO 모델의 정확도 손실을 최소화하면서도 Int8 정밀도의 극한의 추론 속도를 확보하는 것이 가능할 것으로 보입니다.
+
+## 프로젝트 회고
+
+PassCheckers는 약 1년이라는 긴 시간 동안 기획부터 개발까지 온전히 몰입했던 졸업 프로젝트입니다. 주제 선정부터 기능 설계까지 어느 하나 쉬운 과정이 없었지만, 그중에서도 가장 치열하게 고민했던 분야는 단연 **객체 탐지**였습니다.
+
+초기에는 작은 객체 탐지에 강점이 있는 YOLO-NAS 도입을 고려했으나, 상용 라이선스 이슈라는 벽에 부딪혔습니다. 하지만 좌절하는 대신 당시 최신 모델이었던 YOLOv11x를 과감히 채택하고, 수하물 특성에 맞는 방대한 데이터셋을 직접 구축하며 돌파구를 찾았습니다. 데이터 전처리와 학습에 쏟은 수많은 시간은 결국 SKU와 YOLO를 결합한 이중 탐지 파이프라인이라는 결과물로 이어졌고, 이를 통해 작은 객체 탐지 성능을 비약적으로 끌어올린 경험은 저에게 "시간은 배신하지 않는다"는 확신을 주었습니다.
+
+또한, Flask와 Vue.js를 활용해 풀스택을 구현하면서 단순히 '기능이 동작하는 것'을 넘어 "사용자에게 우리 프로젝트에서 최선의 UI/UX는 어떨까", <b>"어떻게 하면 API 응답 속도를 극한으로 줄일 수 있을까?"</b>를 끊임없이 고민했습니다. 이 과정에서 Gemini API와 코드 에이전트 같은 최신 기술을 적극적으로 도입해 서비스의 완성도를 높였고, 결과적으로 개발자로서 한 단계 도약할 수 있는 값진 밑거름이 되었습니다.

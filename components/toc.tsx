@@ -17,7 +17,6 @@ interface Heading {
 export default function TableOfContents() {
   const [headings, setHeadings] = useState<Heading[]>([])
   const [activeId, setActiveId] = useState("")
-  // [NEW] TOC 보임 여부 상태
   const [isVisible, setIsVisible] = useState(false)
 
   // 1. 목차 리스트 생성
@@ -31,51 +30,42 @@ export default function TableOfContents() {
     setHeadings(headingData)
   }, [])
 
-  // 2. 스크롤 추적 (활성 ID 및 등장 여부 체크)
+  // 2. 스크롤 이벤트
   useEffect(() => {
     const handleScroll = () => {
-      // --- A. TOC 등장/퇴장 로직 (핵심) ---
       const contentElement = document.querySelector(".prose")
       if (contentElement) {
         const rect = contentElement.getBoundingClientRect()
-        // 본문(.prose)의 상단이 화면의 60% 지점보다 위로 올라오면 TOC 등장
-        // 즉, 헤더를 지나 본문을 읽을 준비가 되었을 때 나타남
-        const triggerPoint = window.innerHeight * 0.6
-        
-        if (rect.top <= triggerPoint) {
+        if (rect.top <= window.innerHeight * 0.6) {
           setIsVisible(true)
         } else {
           setIsVisible(false)
         }
       } else {
-        // 본문이 없는 예외적인 경우 그냥 보여줌
         setIsVisible(true)
       }
 
-      // --- B. 활성 헤더(Active ID) 추적 로직 ---
-      const TRIGGER_TOP = 150 // 헤더 활성화 기준선
       const elements = Array.from(document.querySelectorAll(".prose h1, .prose h2, .prose h3"))
-      let currentId = ""
+      const targetLine = 100 
+      
+      let currentActiveId = ""
 
       for (const elem of elements) {
-        const top = elem.getBoundingClientRect().top
-        if (top <= TRIGGER_TOP) {
-          currentId = elem.id
+        const rect = elem.getBoundingClientRect()
+        if (rect.top < targetLine) {
+          currentActiveId = elem.id
         } else {
-          break
+          break 
         }
       }
 
-      if (currentId) {
-        setActiveId(currentId)
-      } else if (elements.length > 0 && window.scrollY < 100) {
-         // 최상단이면 첫 번째 목차 활성화 (선택 사항)
-         setActiveId(elements[0].id)
+      if (currentActiveId) {
+        setActiveId(currentActiveId)
       }
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
-    handleScroll() // 초기 상태 반영을 위해 실행
+    handleScroll() 
 
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
@@ -99,23 +89,34 @@ export default function TableOfContents() {
         ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"}
       `}
     >
-      <ul className={`space-y-3 text-[16.5px] ${paperlogyBold.className}`}>
+      <ul className={`space-y-2 ${paperlogyBold.className}`}>
         {headings.map((heading) => (
           <li
             key={heading.id}
-            style={{ 
-              paddingLeft: heading.level === 3 ? "1rem" : "0",
-            }}
+            className={`
+              ${heading.level === 1 ? "mt-4 mb-2" : "mt-1"}
+            `}
           >
             <a
               href={`#${heading.id}`}
               onClick={(e) => handleClick(e, heading.id)}
               className={`
-                block
-                transition-all duration-300 ease-in-out
+                block transition-all duration-300 ease-in-out cursor-pointer line-clamp-1
+                
+                /* 레벨별 들여쓰기 */
+                ${heading.level === 1 ? "pl-0" : ""}
+                ${heading.level === 2 ? "pl-3" : ""}
+                ${heading.level === 3 ? "pl-6 border-l-2 border-gray-100" : ""} 
+
+                /* 레벨별 글자 크기 */
+                ${heading.level === 1 ? "text-[16px]" : ""}
+                ${heading.level === 2 ? "text-[14.5px] opacity-90" : ""}
+                ${heading.level === 3 ? "text-[13.5px] opacity-80" : ""}
+
+                /* [수정됨] 느낌표(!)를 붙여서 호버 색상을 강제 적용 */
                 ${activeId === heading.id
-                  ? "text-[#748E63] scale-105 origin-left font-medium" 
-                  : "text-gray-300 hover:text-gray-500 scale-100" 
+                  ? "text-[#748E63] scale-105 origin-left opacity-100 font-medium" 
+                  : "text-gray-300 hover:!text-[#97A87A] scale-100" // <--- 여기 ! 추가
                 }
               `}
             >

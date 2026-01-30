@@ -41,9 +41,9 @@ export default function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[450px] w-full overflow-hidden">
+      <section className="relative h-[500px] w-full overflow-hidden">
         <Image
-          src="/cozy-desk-setup-with-matcha-green-aesthetic-warm-l.jpg"
+          src="/hero_image.png"
           alt="Hero banner"
           fill
           className="object-cover"

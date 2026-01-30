@@ -8,7 +8,7 @@ export function Footer() {
           <p className="text-sm text-gray-400">© {new Date().getFullYear()} minari0v0. All rights reserved.</p>
           <div className="flex gap-4">
             <a
-              href="https://github.com"
+              href="https://github.com/minari0v0"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-[#7c9070] transition-colors"
@@ -17,7 +17,7 @@ export function Footer() {
               <Github className="w-5 h-5" />
             </a>
             <a
-              href="mailto:hello@minari0v0.dev"
+              href="mailto:cc360653@gmail.com"
               className="text-gray-400 hover:text-[#7c9070] transition-colors"
               aria-label="Email"
             >

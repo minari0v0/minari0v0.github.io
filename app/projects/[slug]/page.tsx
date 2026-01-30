@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { ArrowLeft, Globe } from "lucide-react"
-import { getProjectBySlug, getProjectPosts } from "@/lib/mdx"
+import { getProjectBySlug, getProjectPosts, getAdjacentPosts } from "@/lib/mdx"
 import TableOfContents from "@/components/toc"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
@@ -10,9 +10,13 @@ import rehypeSlug from "rehype-slug"
 import rehypePrettyCode from "rehype-pretty-code"
 import { ProjectInfo } from "@/components/project-info"
 import { GithubButton } from "@/components/ui/github-button"
+import { ProjectNavigation } from "@/components/project-navigation"
+import { Comments } from "@/components/comments"
+import Mermaid from "@/components/mermaid"
+import AutoPlayVideo from "@/components/autoplay-video"
 
 const prettyCodeOptions = {
-  theme: "one-dark-pro",
+  theme: "github-dark",
   keepBackground: false,
 }
 
@@ -31,19 +35,21 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
+// [중요] 컴포넌트 이름이 ProjectDetailPage여야 하고, getProjectBySlug를 사용해야 함
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const { frontmatter, content } = getProjectBySlug(slug)
 
   if (!frontmatter) notFound()
 
+  // [NEW] 프로젝트용 앞/뒤 네비게이션 가져오기
+  const { prev, next } = getAdjacentPosts(slug, "projects")
+
   return (
     <div className="relative max-w-[1100px] mx-auto px-6 pb-20">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-12 mt-8">
-        {/* 본문 영역 (여기에 네비게이션을 넣음) */}
         <article className="min-w-0">
           
-          {/* 1. 상단 네비게이션 & GitHub 버튼 (Article 내부 배치) */}
           <div className="flex items-center justify-between mb-8">
             <Link
               href="/projects"
@@ -53,24 +59,20 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               모든 프로젝트
             </Link>
             
-            {/* 이제 이 버튼은 Article 너비(약 800px)의 오른쪽 끝에 붙습니다 */}
             {frontmatter.github && (
                <GithubButton href={frontmatter.github} />
             )}
           </div>
 
           <header className="mb-12">
-            {/* 2. 제목 */}
             <h1 className="text-4xl md:text-5xl font-bold text-[#333333] mb-5 leading-tight tracking-tight">
               {frontmatter.title}
             </h1>
             
-            {/* 3. 설명 */}
             <p className="text-xl text-gray-500 font-medium mb-8 leading-relaxed">
               {frontmatter.description}
             </p>
 
-            {/* 4. 핵심 태그 뱃지 */}
             <div className="flex flex-wrap gap-2 mb-10">
               {frontmatter.tags?.map((tag: string) => (
                 <span
@@ -82,7 +84,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               ))}
             </div>
 
-            {/* 5. 썸네일 */}
             {frontmatter.thumbnail && (
               <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-10 shadow-lg bg-gray-50 border border-gray-100">
                  <Image 
@@ -91,11 +92,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                    fill 
                    className="object-cover"
                    priority
+                   unoptimized // 외부 이미지 허용
                  />
               </div>
             )}
 
-            {/* Live Demo 버튼 */}
             {frontmatter.demo && (
               <div className="flex justify-end mb-4">
                  <a
@@ -110,7 +111,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               </div>
             )}
 
-            {/* 6. 상세 정보 카드 (토스 스타일 + 기술스택 카드화) */}
             <ProjectInfo 
               startDate={frontmatter.startDate || frontmatter.date}
               endDate={frontmatter.endDate}
@@ -119,10 +119,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             />
           </header>
 
-          {/* 7. 본문 */}
           <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-img:rounded-xl">
             <MDXRemote 
-               source={content} 
+               source={content}
+               components={{ Mermaid, AutoPlayVideo }} 
                options={{
                  mdxOptions: {
                    remarkPlugins: [remarkGfm],
@@ -134,9 +134,15 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                }}
              />
           </div>
+
+          {/* 프로젝트 네비게이션 (이전/다음) */}
+          <ProjectNavigation prevProject={prev} nextProject={next} />
+
+          {/* [NEW] 댓글 기능 추가 */}
+                  <Comments />
+
         </article>
 
-        {/* 우측 TOC (이제 버튼과 겹치지 않음!) */}
         <aside className="hidden lg:block">
           <div className="sticky top-32">
             <TableOfContents />
