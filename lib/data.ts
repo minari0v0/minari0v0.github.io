@@ -6,7 +6,6 @@ export interface Project {
   techStack: string[]
   date: string
   github?: string
-  content: string
 }
 
 export interface BlogPost {
@@ -15,159 +14,53 @@ export interface BlogPost {
   excerpt: string
   date: string
   image: string
-  content: string
 }
 
+// [FIXED] 더미 데이터 제거 및 실제 프로젝트 데이터(MDX 기반)로 교체
 export const projects: Project[] = [
   {
-    id: "markdown-editor",
-    title: "Markdown Editor",
-    description: "A minimal markdown editor with live preview and dark mode support.",
-    image: "/markdown-editor-dark-theme-minimal.jpg",
-    techStack: ["React", "TypeScript", "Tailwind CSS"],
-    date: "2024-12-15",
-    github: "https://github.com/minari0v0/markdown-editor",
-    content: `
-## Overview
-
-A clean, distraction-free markdown editor built for developers who want simplicity.
-
-## Features
-
-- Live preview with syntax highlighting
-- Dark mode support
-- Export to HTML and PDF
-- Keyboard shortcuts
-
-\`\`\`typescript
-const parseMarkdown = (text: string): string => {
-  return marked.parse(text);
-};
-\`\`\`
-    `,
+    id: "passcheckers",
+    title: "PassCheckers",
+    description: "AI 이미지 분석 기반 수하물 분류 및 여행 도우미 애플리케이션",
+    image: "/images/projects/passcheckers/main.gif", // MDX의 thumbnail 경로
+    techStack: ["Vue.js", "Flask", "YOLOv11", "MySQL", "Nginx"],
+    date: "2025.03 - 2025.12",
+    github: "https://github.com/minari0v0/PassCheckers",
   },
   {
-    id: "api-dashboard",
-    title: "API Dashboard",
-    description: "Real-time analytics dashboard for monitoring API performance and metrics.",
-    image: "/api-dashboard-analytics-clean-design.jpg",
-    techStack: ["Next.js", "PostgreSQL", "Chart.js"],
-    date: "2024-11-20",
-    github: "https://github.com/minari0v0/api-dashboard",
-    content: `
-## Overview
-
-Monitor your APIs in real-time with beautiful visualizations.
-
-## Tech Stack
-
-- Next.js for the frontend
-- PostgreSQL for data storage
-- Chart.js for visualizations
-    `,
+    id: "anomaly-dashboard",
+    title: "금융 이상 거래 탐지 시스템",
+    description: "금융 빅데이터 기반 실시간 신용카드 사기 탐지 및 모니터링 시스템",
+    image: "/images/projects/anomaly-dashboard/main.png",
+    techStack: ["Python", "FastAPI", "React", "Scikit-learn", "Docker"],
+    date: "2025.10 - 2025.12",
+    github: "https://github.com/silok/anomaly-dashboard-project",
   },
   {
-    id: "cli-toolkit",
-    title: "CLI Toolkit",
-    description: "A collection of command-line tools for everyday developer tasks.",
-    image: "/terminal-command-line-interface-developer-tools.jpg",
-    techStack: ["Node.js", "Commander.js", "Chalk"],
-    date: "2024-10-05",
-    github: "https://github.com/minari0v0/cli-toolkit",
-    content: `
-## Overview
-
-Boost your productivity with these CLI tools.
-
-\`\`\`bash
-npm install -g @minari0v0/cli-toolkit
-\`\`\`
-    `,
+    id: "tungzang",
+    title: "텅장수강러",
+    description: "대학생들을 위한 강의 평가 및 정보 공유 커뮤니티",
+    image: "/images/projects/tungzang/Thumbnail.png",
+    techStack: ["Java", "JSP", "Servlet", "MySQL", "jQuery"],
+    date: "2025.04 - 2025.06",
+    github: "https://github.com/minari0v0/tungzang",
+  },
+  {
+    id: "java-omok",
+    title: "Java 소켓 기반 온라인 오목 게임",
+    description: "Java 소켓 통신과 Swing을 활용하여 구현한 2인용 오목 게임",
+    image: "/images/projects/java-omok/Thumbnail.png",
+    techStack: ["Java", "Swing", "Socket", "Multi-threading"],
+    date: "2024.10 - 2024.12",
+    github: "https://github.com/minari0v0/java_omok",
   },
 ]
 
-export const blogPosts: BlogPost[] = [
-  {
-    id: "building-better-apis",
-    title: "Building Better REST APIs",
-    excerpt: "Best practices for designing clean, maintainable REST APIs that developers love to use.",
-    date: "2024-12-20",
-    image: "/rest-api-architecture-diagram-clean-minimal.jpg",
-    content: `
-## Introduction
-
-Good API design is crucial for developer experience.
-
-## Key Principles
-
-### 1. Use Consistent Naming
-
-Always use plural nouns for resources.
-
-\`\`\`
-GET /users
-GET /users/:id
-POST /users
-\`\`\`
-
-### 2. Version Your APIs
-
-Include version in the URL path.
-    `,
-  },
-  {
-    id: "typescript-tips",
-    title: "TypeScript Tips for 2024",
-    excerpt: "Advanced TypeScript patterns that will improve your code quality and developer experience.",
-    date: "2024-12-10",
-    image: "/typescript-code-editor-blue-theme-minimal.jpg",
-    content: `
-## Type Utilities
-
-Learn to use built-in type utilities effectively.
-
-\`\`\`typescript
-type UserKeys = keyof User;
-type PartialUser = Partial<User>;
-\`\`\`
-    `,
-  },
-  {
-    id: "nextjs-performance",
-    title: "Next.js Performance Guide",
-    excerpt: "Optimize your Next.js application for lightning-fast load times and better user experience.",
-    date: "2024-11-28",
-    image: "/nextjs-performance-metrics-dashboard-minimal.jpg",
-    content: `
-## Server Components
-
-Use React Server Components to reduce bundle size.
-
-## Image Optimization
-
-Always use next/image for automatic optimization.
-    `,
-  },
-]
+// [FIXED] 더미 블로그 데이터 제거 (나중에 실제 데이터가 생기면 추가하세요)
+export const blogPosts: BlogPost[] = []
 
 export const skills = {
   frontend: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Vue.js"],
-  backend: ["Node.js", "Express", "MongoDB", "PostgreSQL", "GraphQL"],
-  tools: ["Git", "Figma", "Slack", "VS Code", "Docker"],
-}
-
-export function getFeaturedProjects(): Project[] {
-  return projects.slice(0, 3)
-}
-
-export function getRecentPosts(count: number): BlogPost[] {
-  return blogPosts.slice(0, count)
-}
-
-export function getProjectById(id: string): Project | undefined {
-  return projects.find((p) => p.id === id)
-}
-
-export function getBlogPostById(id: string): BlogPost | undefined {
-  return blogPosts.find((p) => p.id === id)
+  backend: ["Python", "Flask", "FastAPI", "Java", "MySQL"],
+  tools: ["Git", "Docker", "VS Code", "Figma"],
 }

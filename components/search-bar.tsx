@@ -44,6 +44,7 @@ export function SearchBar() {
     if (query.trim()) {
       router.push(`/search?q=${encodeURIComponent(query)}`)
       setIsSearchOpen(false)
+      setQuery("")
     }
   }
 
