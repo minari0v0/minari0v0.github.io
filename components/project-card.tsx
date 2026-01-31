@@ -1,7 +1,7 @@
 import LoadingLink from "@/components/loading-link"
 import Image from "next/image"
-import { Clock, Calendar } from "lucide-react"
-import { calculateDuration, formatMonth } from "@/lib/date-utils" // [수정] formatMonth 추가 임포트
+import { Clock, Calendar, User, Users } from "lucide-react" // [NEW] 아이콘 추가
+import { calculateDuration, formatMonth } from "@/lib/date-utils"
 
 interface ProjectCardProps {
   id: string
@@ -14,6 +14,7 @@ interface ProjectCardProps {
   href: string
   hideDate?: boolean
   displayDate?: string
+  contribution?: string // [NEW] 기여도 Prop 추가
 }
 
 export function ProjectCard({
@@ -27,17 +28,17 @@ export function ProjectCard({
   href,
   hideDate = false,
   displayDate,
+  contribution, // [NEW]
 }: ProjectCardProps) {
-  // 기간 계산 (약 O개월)
+  // 기간 계산
   const durationString = calculateDuration(startDate, endDate)
-  
-  // 종료일 포맷팅 (YYYY.MM) - endDate가 없으면 '진행 중'
+  // 종료일 포맷팅
   const endDateStr = endDate ? formatMonth(endDate) : "진행 중"
 
   return (
     <LoadingLink
       href={href}
-      className="group flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
+      className="group flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 relative"
     >
       {/* 이미지 영역 */}
       <div className="relative h-48 w-full overflow-hidden bg-gray-100 border-b border-gray-50">
@@ -47,6 +48,21 @@ export function ProjectCard({
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
+
+        {/* [NEW] 기여도 뱃지 (이미지 위에 오버레이) */}
+        {contribution && (
+          <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 bg-black/70 backdrop-blur-[2px] rounded-full shadow-sm z-10">
+            {/* 100% 또는 1인 개발이면 사람 1명(User), 아니면 사람 여러명(Users) 아이콘 */}
+            {contribution.includes("100%") || contribution.includes("1인") ? (
+              <User className="w-3 h-3 text-[#D8E983]" /> // 라임색 포인트
+            ) : (
+              <Users className="w-3 h-3 text-[#D8E983]" />
+            )}
+            <span className="text-[11px] font-bold text-white tracking-wide">
+              {contribution}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* 텍스트 영역 */}
@@ -80,28 +96,23 @@ export function ProjectCard({
           </div>
         )}
 
-        {/* 하단 정보 영역 (날짜 & 기간) */}
+        {/* 하단 정보 영역 */}
         {!hideDate && (
           <div className="pt-3 border-t border-gray-100 text-xs text-gray-500 font-medium">
             {displayDate ? (
-              // Case 1: 블로그 스토리 (날짜 하나만 표시)
+              // Case 1: 블로그 스토리
               <div className="flex items-center">
                 <Calendar className="w-3.5 h-3.5 mr-1.5 text-[#7c9070]" />
                 <span>{displayDate}</span>
               </div>
             ) : (
-              // Case 2: 프로젝트 (종료일 + 소요 기간 함께 표시)
+              // Case 2: 프로젝트
               <div className="flex items-center gap-3">
-                {/* 1. 종료일 (YYYY.MM) */}
                 <div className="flex items-center">
                    <Calendar className="w-3.5 h-3.5 mr-1.5 text-[#7c9070]" />
                    <span className="text-gray-700">{endDateStr}</span>
                 </div>
-                
-                {/* 구분선 (선택 사항) */}
                 <div className="w-px h-2.5 bg-gray-300"></div>
-
-                {/* 2. 소요 기간 (약 O개월) */}
                 <div className="flex items-center">
                    <Clock className="w-3.5 h-3.5 mr-1.5 text-gray-400" />
                    <span>{durationString} 소요</span>

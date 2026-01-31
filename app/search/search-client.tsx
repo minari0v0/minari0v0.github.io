@@ -101,6 +101,7 @@ function SearchContent({ initialProjects, initialPosts }: SearchClientProps) {
                         startDate={project.startDate}
                         endDate={project.endDate}
                         tags={project.tags}
+                        contribution={project.contribution}
                         href={`/projects/${project.slug}`}
                       />
                     ))}

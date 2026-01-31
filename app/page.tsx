@@ -4,7 +4,7 @@ import { getProjectPosts, getBlogPosts } from "@/lib/mdx"
 import { ContentCarousel } from "@/components/content-carousel"
 import { ProjectCard } from "@/components/project-card"
 
-// 타입 정의
+// [수정] Project 인터페이스에 contribution 추가
 interface Project {
   slug: string
   title: string
@@ -13,6 +13,7 @@ interface Project {
   startDate: string | Date
   endDate?: string | Date
   tags: string[]
+  contribution?: string // [NEW]
 }
 
 interface Post {
@@ -78,6 +79,7 @@ export default function HomePage() {
               startDate={project.startDate}
               endDate={project.endDate}
               tags={project.tags}
+              contribution={project.contribution}
               href={`/projects/${project.slug}`}
             />
           ))}
