@@ -60,3 +60,13 @@ npm install
 
 # 4. 개발 서버 실행
 npm run dev
+```
+
+---
+
+## 📬 Contact
+- GitHub: @minari0v0
+- Email: cc360653@gmail.com
+
+© 2026 minari0v0. All rights reserved.
+
