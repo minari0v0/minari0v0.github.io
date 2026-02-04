@@ -49,7 +49,7 @@ export function Comments() {
         <div className={isMounted ? "opacity-0 h-0 overflow-hidden" : "opacity-100 transition-opacity duration-700"}>
           <Giscus
             id="comments"
-            repo="minari0v0/my-new-portfolio"
+            repo="minari0v0/minari0v0.github.io"
             repoId="R_kgDOQ6_a0Q"
             category="General"
             categoryId="DIC_kwDOQ6_a0c4C1Uuc"
