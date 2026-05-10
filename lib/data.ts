@@ -19,6 +19,15 @@ export interface BlogPost {
 // [FIXED] 더미 데이터 제거 및 실제 프로젝트 데이터(MDX 기반)로 교체
 export const projects: Project[] = [
   {
+    id: "i-note",
+    title: "i-Note",
+    description: "AI 기반 영유아 스마트 리포트 및 보육 행정 혁신 솔루션",
+    image: "/images/projects/i-note/main.png",
+    date: "2026-04",
+    techStack: ["React", "TypeScript", "Node.js", "Express", "Firebase", "Gemini API"],
+    github: "https://github.com/Legend-Vibe-Guys",
+  },
+  {
     id: "passcheckers",
     title: "PassCheckers",
     description: "AI 이미지 분석 기반 수하물 분류 및 여행 도우미 애플리케이션",

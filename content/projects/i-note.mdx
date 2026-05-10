@@ -1,0 +1,159 @@
+---
+title: 바이브 코딩 공모전 - 아이노트
+description: AI 기반 영유아 스마트 리포트 및 보육 행정 혁신 솔루션
+thumbnail: /images/projects/i-note/main.png
+startDate: "2026-04"
+endDate: "2026-04"
+type: "팀 프로젝트"
+contribution: "기여도 35% (팀원, Full Stack)" 
+tags: ["React", "TypeScript", "Node.js", "Express", "Firebase", "Gemini API"]
+github: https://github.com/Legend-Vibe-Guys
+---
+
+## 프로젝트 개요
+
+> **"교사에게는 여유를, 부모에게는 확신을."**
+
+이번 바이브 코딩 공모전에서는 교육 현장의 실질적인 Pain Point를 해결하는 솔루션 제안이 요구되었습니다. 이에 우리 팀은 어린이집 및 유치원 교사들이 매일 반복적으로 수행하는 **알림장 및 관찰일지 작성 업무의 부담을 AI를 통해 혁신적으로 줄여보고자** '아이노트(i-Note)'를 기획하게 되었습니다. 단순한 기록의 자동화를 넘어, 파편화된 메모와 사진 데이터를 모아 전문가 수준의 발달 리포트로 가공해 학부모에게 제공하는 스마트 보육 플랫폼을 목표로 하였습니다.
+
+## 프로젝트 구조
+
+프로젝트는 React 기반의 프론트엔드와 Node.js 기반의 백엔드로 명확히 분리하여 개발되었습니다.
+
+```text
+바이브가이즈/
+├── backend/                        # Node.js + Express 백엔드
+│   ├── src/
+│   │   ├── controllers/            # auth, report, observation 등 비즈니스 로직 제어
+│   │   ├── lib/                    # firebase, gemini, cloudinary 외부 연동
+│   │   ├── routes/                 # 도메인별 API 라우팅
+│   │   ├── services/               # 데이터베이스 접근 및 핵심 로직
+│   │   └── app.ts                  # Express 애플리케이션 진입점
+│   └── package.json
+└── frontend/                       # React + Vite 프론트엔드
+    ├── src/
+    │   ├── api/                    # 백엔드 연동을 위한 API 호출 유틸
+    │   ├── components/             # 공통 UI 및 교사 전용 컴포넌트
+    │   ├── pages/                  # auth, parent, teacher 역할별 페이지
+    │   ├── router/                 # 클라이언트 사이드 라우팅
+    │   └── store/                  # Context API를 활용한 상태 관리
+    └── package.json
+```
+
+## 기술 스택 및 아키텍처
+
+| 분류 | 기술 |
+|:--------:|:-----:|
+| **Frontend** | React, TypeScript, Vite, TailwindCSS |
+| **Backend** | Node.js, Express |
+| **AI / API** | Google Gemini 3.1 Flash Lite, Groq (STT) |
+| **Database** | Firebase Firestore |
+| **Auth** | Firebase Auth (Google OAuth) |
+| **Infra/Media**| Vercel, Render, Cloudinary |
+
+## UI/UX 특징
+
+모바일 특화 웹 애플리케이션으로 설계하여, 사용자가 네이티브 앱을 사용하는 것과 거의 동일한 부드러운 화면 전환과 기능 동작을 제공
+
+---
+#### [교사]
+
+![교사 메인](/images/projects/i-note/main-teacher.png)
+메인 페이지
+
+![교사 일정](/images/projects/i-note/calender-teacher.png)
+일정 페이지
+
+![아이 관리 교사 페이지](/images/projects/i-note/admin-teacher.png)
+아이 관리
+
+![아이 상세 관리](/images/projects/i-note/administ-teacher.png)
+아이 상세 관리 페이지
+
+![알림장](/images/projects/i-note/notice-teacher.png)
+알림장 페이지
+
+![관찰일지](/images/projects/i-note/memo-teacher.png)
+관찰일지 페이지
+
+#### [학부모]
+
+![학부모 메인](/images/projects/i-note/main-parent.png)
+메인 페이지
+
+![관찰일지](/images/projects/i-note/memo-parent.png)
+학부모 관찰일지 페이지
+
+---
+<br>
+- **직관적인 사용성**: 바쁜 보육 현장에서 타이핑 시간을 최소화할 수 있도록 폼(Form)을 간소화하고 직관적인 터치 위주의 UI를 적용했습니다.
+- **역할 기반 인터페이스 분리**: 교사와 학부모의 로그인 역할(Role)에 따라 페이지 라우팅과 보여지는 대시보드 구조를 완벽히 분리하여, 각 사용자가 필요한 기능에만 집중할 수 있도록 구성했습니다.
+
+## 주요 기능
+
+1. **AI 초안 작성 자동화**: LLM API를 활용해 키워드와 짧은 메모만으로도 학부모에게 보낼 알림장과 관찰일지의 초안을 다정한 문체로 자동 완성합니다.
+2. **유치원 ERP 구현**: 스마트 출결 관리부터 원아의 일정 관리까지 통합적인 원내 행정 관리가 가능합니다.
+3. **간편한 인증**: Firebase Auth 기반의 Google OAuth를 도입하여 복잡한 가입 절차 없이 교사와 학부모가 간편하게 서비스를 이용할 수 있습니다.
+4. **역할별 권한 제어 (RBAC)**: 로그인된 사용자의 역할에 따라 데이터를 철저히 격리하고, 교사는 담당 원아의 정보를, 학부모는 본인 자녀의 정보만 조회할 수 있도록 보안을 강화했습니다.
+
+## 핵심 기술
+
+1. **Gemini API를 통한 발달 리포트 생성**: `gemini-3.1-flash-lite-preview` 모델을 사용하여 교사가 틈틈이 남긴 관찰 메모를 한 달 주기로 종합하고, 신체, 인지, 사회성 등 영역별로 분석된 관찰일지 및 알림장을 자동 작성합니다.
+2. **비정형 데이터의 구조화**: 아이들마다 작성된 짧은 관찰 메모들을 AI 프롬프트 엔지니어링을 통해 정형화된 JSON 형태의 종합 관찰일지 데이터로 변환합니다.
+3. **학부모-교사 소통 채널**: 알림장 내에 댓글 기능을 구현하여, 학부모와 교사 간의 원활한 피드백과 소통을 돕습니다.
+4. **Groq API를 활용한 초고속 STT 기능**: 손이 자유롭지 못한 교사들을 위해, Whisper 모델을 탑재한 Groq API를 도입해 음성을 텍스트로 즉각적이고 안정적으로 변환(STT)합니다.
+5. **Cloudinary를 통한 미디어 최적화**: 많은 양의 활동 사진 업로드 시 발생할 수 있는 DB 비용과 부하를 줄이기 위해 Cloudinary CDN을 도입, 빠르고 최적화된 이미지 렌더링을 제공합니다.
+
+#### 🎙️ STT (Speech-to-Text) 기능 구현 예시
+음성 메모를 실시간 텍스트로 변환하기 위해 속도가 매우 빠른 Groq API를 연동한 백엔드 코드입니다.
+```typescript
+// backend/src/controllers/observationController.ts
+export const transcribeSTT = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.file) return res.status(400).json({ error: '오디오 파일이 없습니다.' });
+
+    const groqApiKey = process.env.GROQ_API_KEY;
+    const formData = new FormData();
+    const blob = new Blob([new Uint8Array(req.file.buffer)], { type: req.file.mimetype || 'audio/webm' });
+
+    formData.append('file', blob, 'audio.webm');
+    formData.append('model', 'whisper-large-v3');
+    formData.append('language', 'ko');
+    formData.append('response_format', 'json');
+
+    const groqRes = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${groqApiKey}` },
+      body: formData
+    });
+
+    const result = (await groqRes.json()) as { text: string };
+    res.status(200).json({ text: result.text });
+  } catch (error) {
+    next(error);
+  }
+};
+```
+
+## 프로젝트 성과
+
+- **바이브 코딩을 통한 애자일 경험**: AI 에이전트를 활용한 바이브 코딩을 통해 매우 빠르고 효율적인 개발 사이클을 경험했습니다. 복잡한 로직이나 단순 반복적인 컴포넌트 제작 시 시간을 대폭 절약할 수 있었습니다.
+- **프롬프트 엔지니어링 고도화**: 상용 LLM API를 연동하면서, 프론트엔드에서 렌더링하기 편하도록 정형화된 특정 서식(JSON)과 다정한 교사의 톤 앤 매너로 응답을 일정하게 받아내기 위한 프롬프팅 스킬을 체득했습니다.
+- **서버리스 자동화 파이프라인**: Vercel(프론트엔드), Render(백엔드), Firebase(DB/Auth)를 조합하여 자동 배포 파이프라인을 구축함으로써, 인프라 관리의 부담 없이 개발과 배포 속도의 효율성을 극대화했습니다.
+
+## 개선할 부분
+
+솔루션을 기획하고 구현하면서 아쉬웠던 점도 물론 있었다.
+
+첫째, 유아들을 다수 관리하느라 손이 바쁜 교사들을 위해 AI가 상황을 자동으로 인지하거나 더 능동적인 개입을 해주는 부가 기능들이 더 많았다면 훨씬 실용적이었을 것 같다.
+둘째, 학부모 측면에서도 단순 결과 리포트 조회를 넘어, 가정 내 육아 고민을 상담할 수 있는 학부모 전용 AI 챗봇 솔루션이 함께 제공되었다면 더욱 완성도 높은 서비스가 되었을 것이다. 전체적으로 학부모를 위한 AI 솔루션 제공 비중이 다소 부족했던 점이 아쉬움으로 남아버렸다.
+
+이번 프로젝트를 통해, **초기 기획과 플로우 설계를 얼마나 정확하고 탄탄하게 하느냐에 따라 추후에 더 좋은 기능과 아이디어를 확장할 수 있는 가능성이 높아진다**는 것을 느꼈다.
+
+## 프로젝트 회고
+
+AI 에이전트를 활용한 바이브 코딩이 이번이 처음은 아니었으나, 가장 트렌디한 AI 툴들을 적극적으로 도입해 본 결과 **개발에 있어서 압도적인 효율성과 시간 절약**을 실감할 수 있었다. 특히 사용자의 기존 코딩 지식과 도메인 이해도에 따라 AI를 훨씬 더 정밀하게 다룰 수 있다는 것이다.
+
+앞으로 코딩 공부를 꾸준히 병행하여 각 도메인과 기술 스택에 맞게 AI를 더 효율적으로 조율하는 실력을 기르는 것이 중요하다고 느꼈다. 
+
+무엇보다 가장 크게 체감한 변화는, 이제는 단순한 코딩 실력을 넘어서 **어떤 주제를 잡고, 어떤 기능과 플로우를 정교하게 설계할 것인가**가 프로젝트의 핵심 역량으로 대두되고 있다는 점이다. 기획과 설계가 완벽해야만 AI를 지휘하여 훌륭한 결과물을 완성할 수 있음을 배운 값진 경험이었다고 생각한다.
