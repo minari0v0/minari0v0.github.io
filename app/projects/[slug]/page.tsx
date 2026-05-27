@@ -14,6 +14,7 @@ import { ProjectNavigation } from "@/components/project-navigation"
 import { Comments } from "@/components/comments"
 import Mermaid from "@/components/mermaid"
 import AutoPlayVideo from "@/components/autoplay-video"
+import { CustomPre } from "@/components/custom-pre"
 
 const prettyCodeOptions = {
   theme: "github-dark",
@@ -122,7 +123,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-img:rounded-xl">
             <MDXRemote 
                source={content}
-               components={{ Mermaid, AutoPlayVideo }} 
+               components={{ Mermaid, AutoPlayVideo, pre: CustomPre }} 
                options={{
                  mdxOptions: {
                    remarkPlugins: [remarkGfm],

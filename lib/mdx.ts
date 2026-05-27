@@ -66,6 +66,21 @@ export function getProjectPosts() {
   })
 }
 
+function preprocessMdxContent(content: string) {
+  let processed = content
+    .replace(/<br>/g, "<br />")
+    .replace(/<img([^>]+)>/g, "<img$1 />")
+    .replace(/<hr>/g, "<hr />")
+
+  // Convert ```mermaid ... ``` to <Mermaid chart={`...`} />
+  processed = processed.replace(/```mermaid\r?\n([\s\S]*?)\r?\n```/g, (match, chartCode) => {
+    const safeChartCode = chartCode.replace(/`/g, '\\`').replace(/\$/g, '\\$')
+    return `<Mermaid chart={\`${safeChartCode}\`} />`
+  })
+
+  return processed
+}
+
 export function getProjectBySlug(slug: string) {
   if (!fs.existsSync(projectsDirectory)) return { slug, frontmatter: null, content: "" }
   
@@ -75,10 +90,7 @@ export function getProjectBySlug(slug: string) {
   const fileContents = fs.readFileSync(fullPath, "utf8")
   const { data, content } = matter(fileContents)
 
-  const contentForMdx = content
-    .replace(/<br>/g, "<br />")       // <br> -> <br />
-    .replace(/<img([^>]+)>/g, "<img$1 />") // <img> -> <img />
-    .replace(/<hr>/g, "<hr />");      // <hr> -> <hr />
+  const contentForMdx = preprocessMdxContent(content)
 
   // content 대신 변환된 contentForMdx를 반환
   return { slug, frontmatter: data, content: contentForMdx }
@@ -134,10 +146,7 @@ export async function getBlogPost(slug: string) {
   const source = fs.readFileSync(filePath, "utf-8")
   const { content, data } = matter(source)
 
-  const contentForMdx = content
-    .replace(/<br>/g, "<br />")
-    .replace(/<img([^>]+)>/g, "<img$1 />")
-    .replace(/<hr>/g, "<hr />");
+  const contentForMdx = preprocessMdxContent(content)
 
   const category = data.category || (data.tags && data.tags.length > 0 ? data.tags[0] : "General");
 

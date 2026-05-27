@@ -12,6 +12,8 @@ import rehypeSlug from "rehype-slug"
 import rehypePrettyCode from "rehype-pretty-code"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
+import Mermaid from "@/components/mermaid"
+import { CustomPre } from "@/components/custom-pre"
 
 const prettyCodeOptions = {
   theme: "github-dark",
@@ -90,6 +92,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-img:rounded-xl">
              <MDXRemote 
                source={post.content} 
+               components={{ Mermaid, pre: CustomPre }}
                options={{
                  mdxOptions: {
                    remarkPlugins: [remarkGfm, remarkMath], 
