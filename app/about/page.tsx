@@ -23,7 +23,7 @@ const skillIcons: { [key: string]: React.ReactNode } = {
 
   // --- AI & Data ---
   "YOLOv11": <img src="https://cdn.simpleicons.org/ultralytics/0083FD" alt="YOLOv11" className="w-6 h-6" />, // Ultralytics (파란색 로고)
-  "Gemini API": <Sparkles className="w-6 h-6 text-[#8E75B2]" />, 
+  "Gemini API": <Sparkles className="w-6 h-6 text-[#8E75B2]" />,
   "MySQL": <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg" alt="MySQL" className="w-6 h-6" />,
 
   // --- Tools ---
@@ -35,19 +35,19 @@ const skillIcons: { [key: string]: React.ReactNode } = {
 export default function AboutPage() {
   return (
     <div className="max-w-[1000px] mx-auto px-6 py-20">
-      
+
       {/* 1. 프로필 섹션 */}
       <section className="flex flex-col md:flex-row gap-12 items-center mb-24">
-        
+
         {/* 캐릭터 이미지 영역 */}
         <div className="relative w-full max-w-[360px] aspect-[2/3] md:w-[320px] flex-shrink-0 rounded-3xl overflow-hidden border border-gray-100 shadow-xl bg-[#e3e8e1]">
-           <Image 
-             src="/me_character.png" 
-             alt="Profile Character"
-             fill
-             className="object-cover hover:scale-105 transition-transform duration-700"
-             priority
-           />
+          <Image
+            src="/me_character.png"
+            alt="Profile Character"
+            fill
+            className="object-cover hover:scale-105 transition-transform duration-700"
+            priority
+          />
         </div>
 
         {/* 소개 멘트 & 버튼 영역 */}
@@ -55,7 +55,7 @@ export default function AboutPage() {
           <h2 className="text-lg font-bold text-[#7c9070] mb-2 tracking-wide uppercase">
             Full Stack Developer
           </h2>
-          
+
           {/* 헤드라인 */}
           <h1 className="text-4xl md:text-5xl font-bold text-[#333333] mb-6 leading-tight break-keep">
             빠르게 만들고, <br />
@@ -67,23 +67,23 @@ export default function AboutPage() {
 
           {/* 본문 */}
           <p className="text-gray-600 text-lg leading-relaxed mb-8 break-keep">
-            아이디어를 현실로 만드는 시간은 짧게, 완성도를 높이는 고민은 깊게 가져갑니다. 
+            아이디어를 현실로 만드는 시간은 짧게, 완성도를 높이는 고민은 깊게 가져갑니다.
             웹의 근간이 되는 기술부터 최신 AI 트렌드까지 유연하게 흡수하며, 사용자에게 감동을 줄 수 있는 '쓸모 있는 서비스'를 만듭니다.
           </p>
 
           {/* 버튼 그룹 */}
           <div className="flex flex-wrap gap-3 justify-center md:justify-start">
             {/* 깃허브 버튼 */}
-            <a 
-              href="https://github.com/minari0v0" 
-              target="_blank" 
+            <a
+              href="https://github.com/minari0v0"
+              target="_blank"
               className="group flex items-center gap-3 pl-2 pr-5 py-2 bg-[#24292F] text-white font-bold rounded-xl hover:bg-[#333] hover:-translate-y-1 transition-all shadow-md"
             >
               <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-white/30 group-hover:border-white/50 transition-colors">
-                <Image 
+                <Image
                   src="https://avatars.githubusercontent.com/u/144759680?v=4&size=64"
-                  alt="minari0v0" 
-                  fill 
+                  alt="minari0v0"
+                  fill
                   className="object-cover"
                 />
               </div>
@@ -94,17 +94,17 @@ export default function AboutPage() {
             </a>
 
             {/* 이메일 버튼 */}
-            <a 
-              href="mailto:cc360653@gmail.com" 
+            <a
+              href="mailto:cc360653@gmail.com"
               className="flex items-center px-5 py-3 bg-white text-gray-700 font-bold border border-gray-200 rounded-xl hover:border-[#7c9070] hover:text-[#7c9070] hover:-translate-y-1 transition-all shadow-sm"
             >
               <Mail className="w-5 h-5 mr-2" />
               Email
             </a>
-            
+
             {/* LinkedIn 버튼 */}
-            <a 
-              href="https://www.linkedin.com/in/minari0v0/" 
+            <a
+              href="https://www.linkedin.com/in/minari0v0/"
               target="_blank"
               className="flex items-center px-5 py-3 bg-[#0077b5] text-white font-bold rounded-xl hover:bg-[#006097] hover:-translate-y-1 transition-all shadow-md"
             >
@@ -124,7 +124,7 @@ export default function AboutPage() {
           <span className="w-1.5 h-8 bg-[#7c9070] rounded-full mr-3"></span>
           Skills
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Frontend */}
           <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
@@ -198,20 +198,36 @@ export default function AboutPage() {
           <span className="w-1.5 h-8 bg-[#7c9070] rounded-full mr-3"></span>
           Projects
         </h2>
-        
+
         <div className="space-y-8 pl-4 border-l-2 border-gray-100 ml-3">
-          
-          {/* 포트폴리오 블로그 */}
+
+          {/* PickPl */}
           <div className="relative pl-8">
             <div className="absolute -left-[21px] top-1.5 w-4 h-4 rounded-full bg-white border-4 border-[#7c9070]"></div>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-baseline mb-2">
-              <h3 className="text-xl font-bold text-gray-800">개인 포트폴리오 블로그 개발</h3>
-              <span className="text-sm font-bold text-[#7c9070]">2026.01 - 현재</span>
+              <h3 className="text-xl font-bold text-gray-800">PickPl</h3>
+              <span className="text-sm font-bold text-[#7c9070]">2026.05 - 현재</span>
             </div>
-            <p className="text-gray-500 text-sm mb-3">Next.js 14, MDX, Tailwind CSS</p>
+            <p className="text-gray-500 text-sm mb-3">Next.js 16, Spring Boot, Redis, MySQL, Docker, Gemini API</p>
             <p className="text-gray-600 leading-relaxed max-w-2xl">
-              Next.js App Router와 MDX를 활용하여 SEO에 최적화된 정적 블로그를 구축했습니다. 
-              Giscus 댓글 연동 및 반응형 UI/UX를 직접 설계 및 구현했습니다.
+              기존의 평점이나 위치 검색에서 벗어나 공간의 '감성 분위기'를 직관적으로 탐색하는 공간 룩북 서비스입니다.
+              Gemini API를 활용해 이미지와 리뷰에서 무드 태그를 자동으로 생성하고,
+              Redis 캐싱을 통해 다중 조건 검색에서도 0.1초 만에 원하는 취향의 공간을 찾아낼 수 있도록 개발하고 있습니다.
+            </p>
+          </div>
+
+          {/* 포트폴리오 블로그 */}
+          <div className="relative pl-8">
+            <div className="absolute -left-[21px] top-1.5 w-4 h-4 rounded-full bg-gray-200"></div>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-baseline mb-2">
+              <h3 className="text-xl font-bold text-gray-800">개인 포트폴리오 블로그 개발</h3>
+              <span className="text-sm font-bold text-gray-400">2026.01 - 2026.02</span>
+            </div>
+            <p className="text-gray-500 text-sm mb-3">Next.js 16, MDX, Tailwind CSS</p>
+            <p className="text-gray-600 leading-relaxed max-w-2xl">
+              오직 글의 가치에만 몰입할 수 있도록 미니멀하게 설계된 정적 블로그입니다.
+              Next.js App Router와 MDX를 도입해 막힘 없이 빠른 로딩 속도와 완벽한 SEO 최적화를 구현했고,
+              Giscus 댓글창과 편안한 반응형 디자인까지 한 땀 한 땀 다듬어가며 구축했습니다.
             </p>
           </div>
 
@@ -233,13 +249,13 @@ export default function AboutPage() {
           <div className="relative pl-8">
             <div className="absolute -left-[21px] top-1.5 w-4 h-4 rounded-full bg-gray-200"></div>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 sm:items-baseline mb-2">
-              <h3 className="text-xl font-bold text-gray-800">신용카드 사기 탐지 AI</h3>
+              <h3 className="text-xl font-bold text-gray-800">신용카드 사기 탐지 AI 대시보드</h3>
               <span className="text-sm font-bold text-gray-400">2025.10 - 2025.12</span>
             </div>
             <p className="text-gray-500 text-sm mb-3">AI & Data Engineering</p>
             <p className="text-gray-600 leading-relaxed max-w-2xl">
-              Isolation Forest와 SMOTE 기법을 활용하여 불균형 데이터셋(0.17% 사기 비율)에서의 탐지 성능을 극대화했습니다.
-              AI 모델 서빙을 위한 FastAPI 백엔드와 모니터링 대시보드(React)까지 전체 풀스택 시스템을 전담하여 구축했습니다.
+              극도로 불균형한 금융 데이터셋(사기 거래 비율 0.17%)에서 이상 거래를 실시간으로 탐지하는 AI 모니터링 대시보드입니다.
+              Isolation Forest와 SMOTE로 탐지 모델 성능을 최적화했으며, FastAPI 백엔드와 React 대시보드 화면을 연동하여 완성도 높은 탐지 시스템을 구축했습니다.
             </p>
           </div>
 
@@ -252,8 +268,8 @@ export default function AboutPage() {
             </div>
             <p className="text-gray-500 text-sm mb-3">Java Servlet/JSP, MySQL</p>
             <p className="text-gray-600 leading-relaxed max-w-2xl">
-              프레임워크 없이 순수 Java와 표준 웹 기술만으로 MVC 패턴을 직접 구현한 풀스택 프로젝트입니다.
-              강의 평가, 시간표, 커뮤니티 기능을 포함한 올인원 학사 관리 서비스를 제작했습니다.
+              대학생들의 필수 앱인 '에브리타임'을 참고해 "이걸 내 손으로 직접 만들면 어떨까?" 하는 도전 정신에서 시작한 대학 생활 올인원 서비스입니다.
+              외부 프레임워크 도움 없이 순수 Java Servlet/JSP와 표준 MVC 패턴만으로 백엔드부터 프론트엔드까지 탄탄하게 구현했습니다.
             </p>
           </div>
 
@@ -280,7 +296,7 @@ export default function AboutPage() {
           <span className="w-1.5 h-8 bg-[#7c9070] rounded-full mr-3"></span>
           Education
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* 안양대학교 */}
           <div className="flex items-start p-5 rounded-2xl bg-gray-50 border border-gray-100">
@@ -290,7 +306,7 @@ export default function AboutPage() {
             <div>
               <h3 className="text-lg font-bold text-gray-800">안양대학교</h3>
               <p className="text-gray-600 text-sm mb-1 font-medium">소프트웨어학과 학사</p>
-              <span className="text-xs font-bold text-white bg-[#7c9070] px-2 py-0.5 rounded-md">2020.03 - 2026.02 (예정)</span>
+              <span className="text-xs font-bold text-white bg-[#7c9070] px-2 py-0.5 rounded-md">2020.03 - 2026.02</span>
             </div>
           </div>
 
@@ -316,7 +332,7 @@ export default function AboutPage() {
           <span className="w-1.5 h-8 bg-[#7c9070] rounded-full mr-3"></span>
           Certification
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* 정보처리기사 */}
           <div className="flex items-start p-5 rounded-2xl bg-gray-50 border border-gray-100">
